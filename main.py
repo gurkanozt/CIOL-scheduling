@@ -7,11 +7,7 @@ pr1.printTable()
 s1 = SS.Solution(pr1)
 s2 = SS.Solution(pr1)
 
-print s1.solution.T, "\n"
-print s2.solution.T
-
-
-
-
+print s1.solution, "\n"
+print s2.solution
 
 print "oldu bu is"

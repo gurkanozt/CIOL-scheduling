@@ -8,6 +8,7 @@ class Operation:
     def __init__(self):
         self.id = 0
         self.machineid = 0
+        self.processingTime = 0.0
         self.oreleaseTime = 0
         self.ostartTime = -1
         self.ofinishTime = 0
@@ -26,21 +27,26 @@ class Solution(Operation, Job, Machine):
         self.jobs = list()
         self.solution = list()
 
+        totalNumberofOperations = 0
         for j in problem.jobs:
             sjob = Job()
             sjob.id = j.id
+
             for o in j.operations:
                 sop = Operation()
                 sop.id = o.id
                 sjob.operations.append(sop)
+            totalNumberofOperations += len(sjob.operations)
             self.jobs.append(sjob)
 
 
         allOperations = []
 
+        index = 0
         for job in problem.jobs:
             for o in job.operations:
-                allOperations.append([job.id, 0, 0])
+                allOperations.append([job.id,0,0])
+                index +=1
 
         randomSolution = np.random.permutation(allOperations)
 
@@ -49,25 +55,30 @@ class Solution(Operation, Job, Machine):
                 jId = job.id
                 oId = o.id
                 numberOfMachine = len(problem.jobs[jId].operations[oId].machineSet)
-                machineId = problem.jobs[jId].operations[oId].machineSet[np.random.randint(0, numberOfMachine)]
-                self.jobs[jId].operations[oId].machineid = machineId.id
-                #print job.id,"\t", o.id, "\t", o.machineid
 
+                index = np.random.randint(0, numberOfMachine)
+                machineId = problem.jobs[jId].operations[oId].machineSet[index].id
+                self.jobs[jId].operations[oId].machineid = machineId
+                processingTime = problem.jobs[jId].operations[oId].processingTimes[index]
+                self.jobs[jId].operations[oId].processingTime = processingTime
+                #print job.id,"\t", o.id, "\t", o.machineid
+        processingTimes=[]
         indexSet = np.zeros(problem.nj)
         for o in randomSolution:
             o[1] = indexSet[o[0]]
             indexSet[o[0]] = indexSet[o[0]]+ 1
             o[2] = self.jobs[o[0]].operations[o[1]].machineid
+            processingTimes.append(self.jobs[o[0]].operations[o[1]].processingTime)
 
-        self.solution = randomSolution
+        sol = []
+        for si, s in enumerate(randomSolution):
+            sol.append([s[0], s[1], s[2], processingTimes[si]])
+
+        self.solution = sol
 
 
 
 
-
-
-
-print "oldu bu is"
 
 
 
