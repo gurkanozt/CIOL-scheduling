@@ -1,6 +1,6 @@
 import numpy as np
 
-class  FJSSP:
+class FJSSP:
     class machine:
         def __init__(self):
             self.id = 0
@@ -70,8 +70,3 @@ class  FJSSP:
                 print o.id, "\t\t", ma
             print "\n"
 
-pr1 = FJSSP(6, 2, 1.3, 1.0)
-
-pr1.printTable()
-
-print "oldu bu is"
