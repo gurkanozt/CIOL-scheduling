@@ -3,16 +3,17 @@ import numpy as np
 class Machine:
     def __init__(self):
         self.id = 0
-
+        self.mlst=0
+        self.mlft=0
 class Operation:
     def __init__(self):
         self.id = 0
-        self.machineid = 0
+        self.machine = Machine()
+        self.machineId = 0
         self.processingTime = 0.0
         self.oreleaseTime = 0
-        self.ostartTime = -1
-        self.ofinishTime = 0
-
+        self.ost = -1
+        self.oft = 0
 
 class Job:
     def __init__(self):
@@ -26,7 +27,15 @@ class Solution(Operation, Job, Machine):
     def __init__(self, problem):
         self.jobs = list()
         self.solution = list()
-
+        self.machines=list()
+        for i in range(problem.nm):
+            machine=Machine()
+            machine.id=i
+            machine.mlst=0
+            machine.mlft=0
+            self.machines.append(machine)
+        for i in self.machines:
+            print "machines \t", i.id,"\t",i.mlst,"\t",i.mlft
         totalNumberofOperations = 0
         for j in problem.jobs:
             sjob = Job()
@@ -57,17 +66,19 @@ class Solution(Operation, Job, Machine):
                 numberOfMachine = len(problem.jobs[jId].operations[oId].machineSet)
 
                 index = np.random.randint(0, numberOfMachine)
-                machineId = problem.jobs[jId].operations[oId].machineSet[index].id
-                self.jobs[jId].operations[oId].machineid = machineId
+                m = Machine()
+                m.id = problem.jobs[jId].operations[oId].machineSet[index].id
+                self.jobs[jId].operations[oId].machine=m
                 processingTime = problem.jobs[jId].operations[oId].processingTimes[index]
                 self.jobs[jId].operations[oId].processingTime = processingTime
                 #print job.id,"\t", o.id, "\t", o.machineid
+
         processingTimes=[]
         indexSet = np.zeros(problem.nj)
         for o in randomSolution:
             o[1] = indexSet[o[0]]
             indexSet[o[0]] = indexSet[o[0]]+ 1
-            o[2] = self.jobs[o[0]].operations[o[1]].machineid
+            o[2] = self.jobs[o[0]].operations[o[1]].machine.id
             processingTimes.append(self.jobs[o[0]].operations[o[1]].processingTime)
 
         sol = []
@@ -75,6 +86,7 @@ class Solution(Operation, Job, Machine):
             sol.append([s[0], s[1], s[2], processingTimes[si]])
 
         self.solution = sol
+
 
 
 

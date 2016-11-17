@@ -7,6 +7,7 @@ class FJSSP:
             self.MTBF = 0
             self.MTTR = 0
 
+
     class operation:
         def __init__(self):
             self.id = 0
@@ -27,7 +28,6 @@ class FJSSP:
         self.fr=fr
         self.jobs = list()
         self.averageProcessingTime =0
-
         for j in range(nj):
             job = self.job()
             job.id=j
@@ -59,6 +59,8 @@ class FJSSP:
             job.dueDate = dueDate
 
             self.jobs.append(job)
+
+        #print "aaaaa",self.machines
 
     def printTable(self):
         for j in self.jobs:
