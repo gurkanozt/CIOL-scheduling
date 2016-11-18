@@ -1,39 +1,33 @@
-import datetime as dt
 import matplotlib.pyplot as plt
-import matplotlib.font_manager as font_manager
-import matplotlib.dates
-from matplotlib.dates import MONTHLY, DateFormatter, rrulewrapper, RRuleLocator
 import schedulingProblem as SP
 import solution as SS
-from pylab import *
 import numpy as np
 
 class tranformation():
     def __init__(self,problem,solution):
         self.jobs = list()
-        self.cps=list()
-        self.s_load=list()
-        self.f_load=list()
-        self.names=list()
-        self.colors=list()
-        preEndTime=0
+        self.machineName=list()#machines name in the gantt chart
+        self.startTime=list()#start time set
+        self.finishTime=list()#finish time set
+        self.names=list()#operation name set
+        self.colors=list()#operation color
+        preEndTime=0#finish time of previous operation in the permutation
         indexa=0
         for i in solution.solution:
-            job = i[0]
-            op = i[1]
-            mak = i[2]
-            machineEndTime = solution.machines[mak].mlft
-
-            startTime = max(preEndTime,machineEndTime)
-            preEndTime = startTime+i[3]
-            solution.machines[mak].mlft=preEndTime
-            solution.jobs[job].operations[op].ost = startTime
-            solution.jobs[job].operations[op].oft = preEndTime
-            print "bitis", solution.machines[mak].id, "\t",job,"\t",op,"\t",startTime,"\t",solution.machines[mak].mlft
-            self.cps.append(mak)
-            self.s_load.append(startTime)
-            self.f_load.append(preEndTime)
-            self.names.append([mak, startTime, preEndTime, "O_"+str(job)+str(op)])
+            job = i[0]#assign job to job id
+            op = i[1]#assign op to operation id
+            mak = i[2]#assign mak to machine id
+            machineEndTime = solution.machines[mak].mlft#find machine latest finish time
+            startTime = max(preEndTime,machineEndTime)#define current job start time
+            preEndTime = startTime+i[3]#calculate current job finish time
+            solution.machines[mak].mlft=preEndTime#update current machine last finis time
+            solution.jobs[job].operations[op].ost = startTime#assign operation start time to solution jobs set
+            solution.jobs[job].operations[op].oft = preEndTime#assign operation finish time to solution jobs set
+            #print "bitis", solution.machines[mak].id, "\t",job,"\t",op,"\t",startTime,"\t",solution.machines[mak].mlft
+            self.machineName.append(mak)#add machine id to machinename set
+            self.startTime.append(startTime)#add operation start time to startTime set
+            self.finishTime.append(preEndTime)#add operation finish time to finishTime set
+            self.names.append([mak, startTime, preEndTime, "O_"+str(job)+str(op)])#add operation name to names set
 
             if job%2 ==0:
                 self.colors.append("red")
@@ -43,16 +37,21 @@ class tranformation():
         print "aa"
         #plt.rc('grid', linestyle="-", color='gray')
 
-        plt.grid(True)
+        #plt.grid(True)
 
 
-        plt.hlines(self.cps, 0, max(self.f_load),color="gray", lw=44)
+        plt.hlines(self.machineName, 0, max(self.finishTime), color="gray", lw=44)#define gantt chart interval
 
-        plt.hlines(self.cps, self.s_load, self.f_load, colors=self.colors, lw=40)
+        plt.hlines(self.machineName, self.startTime, self.finishTime, colors=self.colors, lw=40)#draw Gantt Chart
         plt.margins(0.1)
+        font = {
+        'size'   : 10}
+
+        plt.rc('font', **font)
+        plt.ylabel("MACHINE",color='red')
+        plt.xlabel("TIME",color='red')
         for i in self.names:
             plt.text(i[1], i[0], i[3])
-
 
         plt.show()
 

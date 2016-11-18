@@ -25,67 +25,67 @@ class Job:
 
 class Solution(Operation, Job, Machine):
     def __init__(self, problem):
-        self.jobs = list()
-        self.solution = list()
-        self.machines=list()
+        self.jobs = list()#job set in solution
+        self.solution = list()#solutin set in solution
+        self.machines=list()#machine set in solution
         for i in range(problem.nm):
-            machine=Machine()
-            machine.id=i
-            machine.mlst=0
-            machine.mlft=0
-            self.machines.append(machine)
-        for i in self.machines:
-            print "machines \t", i.id,"\t",i.mlst,"\t",i.mlft
+            machine=Machine()#define machine as class
+            machine.id=i#assign machine id
+            machine.mlst=0#machine last start time
+            machine.mlft=0#machine last finish time
+            self.machines.append(machine)#add machine object to machines set
+        '''for i in self.machines:
+            print "machines \t", i.id,"\t",i.mlst,"\t",i.mlft'''
         totalNumberofOperations = 0
         for j in problem.jobs:
-            sjob = Job()
-            sjob.id = j.id
+            sjob = Job()#define sjob as class
+            sjob.id = j.id#assign job id
 
             for o in j.operations:
-                sop = Operation()
-                sop.id = o.id
-                sjob.operations.append(sop)
+                sop = Operation()#define sop as class
+                sop.id = o.id#assign operation id
+                sjob.operations.append(sop)#add operation object to sjob set
             totalNumberofOperations += len(sjob.operations)
-            self.jobs.append(sjob)
+            self.jobs.append(sjob)#add sjob set to solution jobs set
 
 
-        allOperations = []
+        allOperations = []#define all operation set
 
         index = 0
         for job in problem.jobs:
             for o in job.operations:
-                allOperations.append([job.id,0,0])
+                allOperations.append([job.id,0,0])#add job id, operation id(default value=0) and machine id(default value=0)
                 index +=1
 
-        randomSolution = np.random.permutation(allOperations)
+        randomSolution = np.random.permutation(allOperations)#convert allOperation set to numpy permutation
 
         for job in self.jobs:
             for o in job.operations:
                 jId = job.id
                 oId = o.id
-                numberOfMachine = len(problem.jobs[jId].operations[oId].machineSet)
+                numberOfMachine = len(problem.jobs[jId].operations[oId].machineSet)#calculate assignable number of machine according to job id an opeation id
 
-                index = np.random.randint(0, numberOfMachine)
-                m = Machine()
-                m.id = problem.jobs[jId].operations[oId].machineSet[index].id
-                self.jobs[jId].operations[oId].machine=m
-                processingTime = problem.jobs[jId].operations[oId].processingTimes[index]
-                self.jobs[jId].operations[oId].processingTime = processingTime
+                index = np.random.randint(0, numberOfMachine)#select random index between 0 and assignable number of machine
+                m = Machine()#define m as Solution Machine class
+                m.id = problem.jobs[jId].operations[oId].machineSet[index].id#assig m id that selects ramdomly assignable machine
+                self.jobs[jId].operations[oId].machine=m#add machine id that is assigned opertation to solution jobs
+                processingTime = problem.jobs[jId].operations[oId].processingTimes[index]#calculate operation process time on assigned  machine
+                self.jobs[jId].operations[oId].processingTime = processingTime#assign this processing time to solution jobs set
                 #print job.id,"\t", o.id, "\t", o.machineid
 
         processingTimes=[]
-        indexSet = np.zeros(problem.nj)
-        for o in randomSolution:
+        indexSet = np.zeros(problem.nj)#define numpy zeros permutation whose lenght equals to number of jobs
+        for o in randomSolution:#generate job based permutation
             o[1] = indexSet[o[0]]
             indexSet[o[0]] = indexSet[o[0]]+ 1
             o[2] = self.jobs[o[0]].operations[o[1]].machine.id
             processingTimes.append(self.jobs[o[0]].operations[o[1]].processingTime)
 
         sol = []
-        for si, s in enumerate(randomSolution):
+        for si, s in enumerate(randomSolution):#add processing time to job based permutation
             sol.append([s[0], s[1], s[2], processingTimes[si]])
 
-        self.solution = sol
+        self.solution = sol#assign sol set to solution set
 
 
 
