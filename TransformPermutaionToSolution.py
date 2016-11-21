@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import matplotlib as mpl
 import schedulingProblem as SP
 import solution as SS
 import numpy as np
@@ -39,19 +40,47 @@ class tranformation():
 
         #plt.grid(True)
 
+        fig = plt.figure(figsize=(10,10))
+        k=0
 
-        plt.hlines(self.machineName, 0, max(self.finishTime), color="gray", lw=44)#define gantt chart interval
+        cmaps  = ["Blues", "Greens", "Reds", "Purples", "Oranges", "Greens", "autumn"]
 
-        plt.hlines(self.machineName, self.startTime, self.finishTime, colors=self.colors, lw=40)#draw Gantt Chart
-        plt.margins(0.1)
-        font = {
-        'size'   : 10}
+        for j in solution.machines:
+            ax = fig.add_axes([0.05, 0.1 + k*0.12 , 0.9, 0.1])
+            ax.xaxis.set_visible(False)
+            ax.yaxis.set_visible(False)
+            k += 1
 
-        plt.rc('font', **font)
-        plt.ylabel("MACHINE",color='red')
-        plt.xlabel("TIME",color='red')
-        for i in self.names:
-            plt.text(i[1], i[0], i[3])
+        maxft = 3* max(self.finishTime)
+        minst = min(self.startTime)
+        range = maxft-minst
+        k=0
+        for j in solution.jobs:
+            cmap = plt.get_cmap(cmaps[k])
+            for o in j.operations:
+                mid = o.machine.id
+                nost = ((o.ost-minst) / range)      #normalized operatio start time
+                noft = ((o.oft-minst) /range)       #normalized operation finis time
+                ax = fig.add_axes([0.05+nost, 0.1 + 0.01 + mid * 0.12 , 0.05+noft, 0.08])
+                cb1 = mpl.colorbar.ColorbarBase(ax, cmap=cmap,
+                                            orientation='vertical')
+                ax.xaxis.set_visible(False)
+                ax.yaxis.set_visible(False)
+
+            k +=1
+
+        #plt.hlines(self.machineName, 0, max(self.finishTime), color="gray", lw=44)#define gantt chart interval
+
+        #plt.hlines(self.machineName, self.startTime, self.finishTime, colors=self.colors, lw=40)#draw Gantt Chart
+        #plt.margins(0.1)
+        #font = {
+        #'size'   : 10}
+
+        #plt.rc('font', **font)
+        #plt.ylabel("MACHINE",color='red')
+        #plt.xlabel("TIME",color='red')
+        #for i in self.names:
+        #    plt.text(i[1], i[0], i[3])
 
         plt.show()
 
