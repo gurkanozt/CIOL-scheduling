@@ -22,47 +22,45 @@ class FJSSP:
             self.dueDate=0
 
     def __init__(self,nm, nj, c, fr):
-        self.nj = nj
-        self.nm = nm
-        self.c = c
-        self.fr=fr
-        self.jobs = list()
+        self.nj = nj#number of jobs
+        self.nm = nm#number of machines
+        self.c = c#tightness factor
+        self.fr=fr#flexiblity rate
+        self.jobs = list()#jobs set in problem set
         self.averageProcessingTime =0
         for j in range(nj):
-            job = self.job()
-            job.id=j
-            numberOfOperations = self.nm
+            job = self.job()#define job as class
+            job.id=j# assign jobs id
+            numberOfOperations = self.nm#assign each job operations number
             for o in range(numberOfOperations):
-                numberOfMachines = 1+np.random.randint(0,fr*self.nm)
-                operation = self.operation()
-                operation.id= o
-                machineSetPermutation = np.random.permutation(self.nm)[:numberOfMachines]
+                numberOfMachines = 1+np.random.randint(0,fr*self.nm)#assign each operation assignable machines number
+                operation = self.operation()#define operation as class
+                operation.id= o#assign operations id
+                machineSetPermutation = np.random.permutation(self.nm)[:numberOfMachines]#assign each operation assignable machines set
                 for m in machineSetPermutation:
-                    machine = self.machine()
-                    machine.id = m
-                    operation.machineSet.append(machine)
-                    t = np.random.uniform((self.nm)/2, (self.nm)*2)
-                    operation.processingTimes.append(t)
-                job.operations.append(operation)
+                    machine = self.machine()#define machine as class
+                    machine.id = m#assign machine id
+                    operation.machineSet.append(machine)#add machine objects to operations assignable machines set
+                    t = np.random.uniform((self.nm)/2, (self.nm)*2)#define each operations processing time
+                    operation.processingTimes.append(t)#add processing time to each operation
+                job.operations.append(operation)#add operation objects to jobs
 
             if self.nj>=50:
-                realeaseTime = np.random.uniform(0, 40)
+                releaseTime = np.random.uniform(0, 40)#generate jobs release time
             else:
-                realeaseTime = np.random.uniform(0, 20)
-            job.releaseTime = realeaseTime
+                releaseTime = np.random.uniform(0, 20)
+            job.releaseTime = releaseTime#assign release time to jobs
 
             job.averageProcessingTime=0
             for o in job.operations:
-                job.averageProcessingTime += np.average(o.processingTimes)
+                job.averageProcessingTime += np.average(o.processingTimes)#calculate jobs average processing time
 
-            dueDate = realeaseTime + self.c * job.averageProcessingTime
-            job.dueDate = dueDate
+            dueDate = releaseTime + self.c * job.averageProcessingTime#calculate jobs due date according to TWK method
+            job.dueDate = dueDate#assign due date to jobs
 
-            self.jobs.append(job)
+            self.jobs.append(job)#add job object to jobs set
 
-        #print "aaaaa",self.machines
-
-    def printTable(self):
+    def printTable(self):# print problem set
         for j in self.jobs:
             print "JOB :\t", j.id, "\t", round(j.releaseTime,2), round(j.dueDate,2),"\n"
             for o in j.operations:

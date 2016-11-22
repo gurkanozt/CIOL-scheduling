@@ -14,6 +14,7 @@ class tranformation():
         self.colors=list()#operation color
         preEndTime=0#finish time of previous operation in the permutation
         indexa=0
+        cc=np.random.rand(problem.nj,3)
         for i in solution.solution:
             job = i[0]#assign job to job id
             op = i[1]#assign op to operation id
@@ -24,21 +25,33 @@ class tranformation():
             solution.machines[mak].mlft=preEndTime#update current machine last finis time
             solution.jobs[job].operations[op].ost = startTime#assign operation start time to solution jobs set
             solution.jobs[job].operations[op].oft = preEndTime#assign operation finish time to solution jobs set
-            #print "bitis", solution.machines[mak].id, "\t",job,"\t",op,"\t",startTime,"\t",solution.machines[mak].mlft
+            print "bitis", solution.machines[mak].id, "\t",job,"\t",op,"\t",startTime,"\t",solution.machines[mak].mlft
             self.machineName.append(mak)#add machine id to machinename set
             self.startTime.append(startTime)#add operation start time to startTime set
             self.finishTime.append(preEndTime)#add operation finish time to finishTime set
             self.names.append([mak, startTime, preEndTime, "O_"+str(job)+str(op)])#add operation name to names set
 
-            if job%2 ==0:
-                self.colors.append("red")
-            else:
-                self.colors.append("green")
+
+
+            self.colors.append(cc[job])
+
             indexa=indexa+1
         print "aa"
         #plt.rc('grid', linestyle="-", color='gray')
 
         #plt.grid(True)
+
+        plt.hlines(self.machineName, 0, max(self.finishTime), color="gray", lw=44)#define gantt chart interval
+
+        plt.hlines(self.machineName, self.startTime, self.finishTime, colors=self.colors, lw=40)#draw Gantt Chart
+        plt.margins(0.1)
+        plt.ylabel("MACHINE",color='red',size='20')
+        plt.xlabel("TIME",color='red',size='20')
+        for i in self.names:
+            plt.text(i[1], i[0], i[3],color='white',size='10')
+
+
+        #plt.show()
 
         fig = plt.figure(figsize=(10,10))
         k=0
@@ -68,21 +81,8 @@ class tranformation():
                 ax.yaxis.set_visible(False)
 
             k +=1
-
-        #plt.hlines(self.machineName, 0, max(self.finishTime), color="gray", lw=44)#define gantt chart interval
-
-        #plt.hlines(self.machineName, self.startTime, self.finishTime, colors=self.colors, lw=40)#draw Gantt Chart
-        #plt.margins(0.1)
-        #font = {
-        #'size'   : 10}
-
-        #plt.rc('font', **font)
-        #plt.ylabel("MACHINE",color='red')
-        #plt.xlabel("TIME",color='red')
-        #for i in self.names:
-        #    plt.text(i[1], i[0], i[3])
-
         plt.show()
+
 
 
 
