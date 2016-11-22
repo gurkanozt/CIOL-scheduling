@@ -14,8 +14,9 @@ class tranformation():
         self.colors=list()#operation color
         preEndTime=0#finish time of previous operation in the permutation
         indexa=0
-        cc=np.random.rand(problem.nj,3)
-        for i in solution.solution:
+        cc=np.random.rand(problem.nj,4)
+        cc[:,3] =0.8
+        for i in solution.order:
             job = i[0]#assign job to job id
             op = i[1]#assign op to operation id
             mak = i[2]#assign mak to machine id
@@ -51,8 +52,8 @@ class tranformation():
             plt.text(i[1], i[0], i[3],color='white',size='10')
 
 
-        #plt.show()
-
+        plt.show()
+'''
         fig = plt.figure(figsize=(10,10))
         k=0
 
@@ -73,8 +74,9 @@ class tranformation():
             for o in j.operations:
                 mid = o.machine.id
                 nost = ((o.ost-minst) / range)      #normalized operatio start time
-                noft = ((o.oft-minst) /range)       #normalized operation finis time
-                ax = fig.add_axes([0.05+nost, 0.1 + 0.01 + mid * 0.12 , 0.05+noft, 0.08])
+                noft = ((o.oft-minst) /range)       #normalized operation finish time
+
+                ax = fig.add_axes([0.05+nost, 0.1 + 0.01 + mid * 0.12 , 0.05 + noft, 0.08])
                 cb1 = mpl.colorbar.ColorbarBase(ax, cmap=cmap,
                                             orientation='vertical')
                 ax.xaxis.set_visible(False)
@@ -87,8 +89,7 @@ class tranformation():
 
 
 
-
-
+'''
 
 '''def create_date(minute):
     """Creates the date"""

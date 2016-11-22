@@ -5,6 +5,7 @@ class Machine:
         self.id = 0
         self.mlst=0
         self.mlft=0
+
 class Operation:
     def __init__(self):
         self.id = 0
@@ -26,7 +27,7 @@ class Job:
 class Solution(Operation, Job, Machine):
     def __init__(self, problem):
         self.jobs = list()          #job set in solution
-        self.solution = list()      #solutin set in solution
+        self.order = list()      #solutin set in solution
         self.machines=list()        #machine set in solution
         for i in range(problem.nm):
             machine=Machine()       #define machine as class
@@ -44,48 +45,13 @@ class Solution(Operation, Job, Machine):
             for o in j.operations:
                 sop = Operation()#define sop as class
                 sop.id = o.id#assign operation id
+                m = Machine()
+                sop.machine = m #define m as Solution Machine class
                 sjob.operations.append(sop)#add operation object to sjob set
             totalNumberofOperations += len(sjob.operations)
             self.jobs.append(sjob)#add sjob set to solution jobs set
 
 
-        allOperations = []#define all operation set
-
-        index = 0
-        for job in problem.jobs:
-            for o in job.operations:
-                allOperations.append([job.id,0,0])#add job id, operation id(default value=0) and machine id(default value=0)
-                index +=1
-
-        randomSolution = np.random.permutation(allOperations)#convert allOperation set to numpy permutation
-
-        for job in self.jobs:
-            for o in job.operations:
-                jId = job.id
-                oId = o.id
-                numberOfMachine = len(problem.jobs[jId].operations[oId].machineSet)#calculate assignable number of machine according to job id an opeation id
-
-                index = np.random.randint(0, numberOfMachine)   #select random index between 0 and assignable number of machine
-                m = Machine()                                   #define m as Solution Machine class
-                m.id = problem.jobs[jId].operations[oId].machineSet[index].id#assig m id that selects ramdomly assignable machine
-                self.jobs[jId].operations[oId].machine=m        #add machine id that is assigned opertation to solution jobs
-                processingTime = problem.jobs[jId].operations[oId].processingTimes[index]#calculate operation process time on assigned  machine
-                self.jobs[jId].operations[oId].processingTime = processingTime#assign this processing time to solution jobs set
-                #print job.id,"\t", o.id, "\t", o.machineid
-
-        processingTimes=[]
-        indexSet = np.zeros(problem.nj)         #define numpy zeros permutation whose lenght equals to number of jobs
-        for o in randomSolution:                #generate job based permutation
-            o[1] = indexSet[o[0]]
-            indexSet[o[0]] = indexSet[o[0]]+ 1
-            o[2] = self.jobs[o[0]].operations[o[1]].machine.id
-            processingTimes.append(self.jobs[o[0]].operations[o[1]].processingTime)
-
-        sol = []
-        for si, s in enumerate(randomSolution):#add processing time to job based permutation
-            sol.append([s[0], s[1], s[2], processingTimes[si]])
-
-        self.solution = sol#assign sol set to solution set
 
 
 
