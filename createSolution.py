@@ -8,34 +8,73 @@ class createSolution:
         self.notFinishedOpSet = list()
         self.freeMahchinesSet = list()
         self.nextEventsSet = list()
+        self.EventsSet = list()
         self.machineWaitingList = list()
+        self.machineEventSet = list()
         self.problem = problem
+        self.currentTime=0
+        self.nextTime=0
 
 
     def initialization(self):
 
-
         for j in self.problem.jobs:
             for o in j.operations:
                 self.notFinishedOpSet.append([j.id, o.id])
-
         self.notReleasedOpSet = self.notFinishedOpSet
-
         for m in range(self.problem.nm):
-            self.freeMahchinesSet.append(m)
+            self.freeMahchinesSet.append(m)#define machine as free
             self.machineWaitingList.append([])
 
+        for j in self.problem.jobs:
+            self.EventsSet.append([j.id ,0,j.releaseTime,'r'])
+
+        #self.releasedOpSet.sort(key=lambda tup: tup[2])
         # ilk released olan isi bul, ilgili operasyonu releasedOpSet'e ata
 
 
 
+    def LeastWaitingTimeAssignment(self):
+        for j in self.releasedOpSet:
+            for m in self.problem.jobs[j[0]].operations[j[1]].machineSet:
+                if m.id not in self.freeMahchinesSet:
+                  a=1
     def update(self):
+
         pass
 
-    def simulatedSolution(self, solution, type):
-        pass
+    def findNextTimeandEvents(self):
+        z= min(self.EventsSet, key=lambda tup: tup[2])
+        #self.releasedOpSet.append([z[0],z[1],z[2]])
+        self.currentTime=z[2]
+        for j in self.EventsSet:
+            if j[3]=='r' :
+                self.releasedOpSet.append(j[:3])
+        else:
+            pass
+            #self.notFinishedOpSet.remove()#how to delete a row. Check it?
+            #self.freeMahchinesSet.append('machine.id')#is it True?
+            #self.machineEventSet.append('machine.id')#is it True?
 
 
+    def simulatedSolution(self,solution):
+        self.initialization()
+        self.nextTime=self.currentTime
+        self.findNextTimeandEvents()
+
+        '''for j in self.nextEventsSet:
+            lena=len(self.problem.jobs[j[0]].operations[j[1]].machineSet)
+            a=np.random.randint(0,lena)
+            assignedMachineId=self.problem.jobs[j[0]].operations[j[1]].machineSet[a].id
+            solution.jobs[j[0]].operations[j[1]].machineId=assignedMachineId
+            print solution.jobs[j[0]].id,solution.jobs[j[0]].operations[j[1]].id,solution.jobs[j[0]].operations[j[1]].machineId
+        '''
+        while self.notFinishedOpSet>0:
+            for j in self.releasedOpSet:
+                if j[2]<=self.currentTime:
+                    self.LeastWaitingTimeAssignment()
+
+            pass
 
 
 

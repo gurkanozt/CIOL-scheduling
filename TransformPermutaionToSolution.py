@@ -3,6 +3,7 @@ import matplotlib as mpl
 import schedulingProblem as SP
 import solution as SS
 import numpy as np
+from matplotlib.widgets import Slider
 
 class tranformation():
     def __init__(self,problem,solution):
@@ -14,8 +15,7 @@ class tranformation():
         self.colors=list()#operation color
         preEndTime=0#finish time of previous operation in the permutation
         indexa=0
-        cc=np.random.rand(problem.nj,4)
-        cc[:,3] =0.8
+        cc=np.random.rand(problem.nj,3)
         for i in solution.order:
             job = i[0]#assign job to job id
             op = i[1]#assign op to operation id
@@ -26,7 +26,7 @@ class tranformation():
             solution.machines[mak].mlft=preEndTime#update current machine last finis time
             solution.jobs[job].operations[op].ost = startTime#assign operation start time to solution jobs set
             solution.jobs[job].operations[op].oft = preEndTime#assign operation finish time to solution jobs set
-            print "bitis", solution.machines[mak].id, "\t",job,"\t",op,"\t",startTime,"\t",solution.machines[mak].mlft
+            #print "bitis", solution.machines[mak].id, "\t",job,"\t",op,"\t",startTime,"\t",solution.machines[mak].mlft
             self.machineName.append(mak)#add machine id to machinename set
             self.startTime.append(startTime)#add operation start time to startTime set
             self.finishTime.append(preEndTime)#add operation finish time to finishTime set
@@ -42,9 +42,12 @@ class tranformation():
 
         #plt.grid(True)
 
-        plt.hlines(self.machineName, 0, max(self.finishTime), color="gray", lw=44)#define gantt chart interval
 
-        plt.hlines(self.machineName, self.startTime, self.finishTime, colors=self.colors, lw=40)#draw Gantt Chart
+
+        #plt.show()
+
+        plt.hlines(self.machineName, 0,max(self.finishTime), color="gray", lw=44,linestyles=':')#define gantt chart interval
+        plt.hlines(self.machineName, self.startTime, self.finishTime, colors=self.colors, lw=44)#draw Gantt Chart
         plt.margins(0.1)
         plt.ylabel("MACHINE",color='red',size='20')
         plt.xlabel("TIME",color='red',size='20')
@@ -74,9 +77,8 @@ class tranformation():
             for o in j.operations:
                 mid = o.machine.id
                 nost = ((o.ost-minst) / range)      #normalized operatio start time
-                noft = ((o.oft-minst) /range)       #normalized operation finish time
-
-                ax = fig.add_axes([0.05+nost, 0.1 + 0.01 + mid * 0.12 , 0.05 + noft, 0.08])
+                noft = ((o.oft-minst) /range)       #normalized operation finis time
+                ax = fig.add_axes([0.05+nost, 0.1 + 0.01 + mid * 0.12 , 0.05+noft, 0.08])
                 cb1 = mpl.colorbar.ColorbarBase(ax, cmap=cmap,
                                             orientation='vertical')
                 ax.xaxis.set_visible(False)
@@ -84,11 +86,6 @@ class tranformation():
 
             k +=1
         plt.show()
-
-
-
-
-
 '''
 
 '''def create_date(minute):
