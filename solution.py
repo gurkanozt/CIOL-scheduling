@@ -5,6 +5,8 @@ class Machine:
         self.id = 0
         self.mlst=0
         self.mlft=0
+        self.mwlm=list()
+        self.mwlwm=0
 
 class Operation:
     def __init__(self):
