@@ -40,9 +40,23 @@ class createSolution:
 
     def LeastWaitingTimeAssignment(self):
         for j in self.releasedOpSet:
+            minWm=1000000000
+            mindex=0
             for m in self.problem.jobs[j[0]].operations[j[1]].machineSet:
                 if m.id not in self.freeMahchinesSet:
-                  a=1
+                    wm1=self.solution.machines[m.id].mlft-self.currentTime
+                else:
+                    wm1=0
+                wm2=self.solution.machines[m.id].mwlwm
+                wm3=self.problem.jobs[j[0]].operations[j[1]].processingTimes[mindex]
+                wm=wm1+wm2+wm3
+                mindex +=1
+                if wm<minWm:
+                    minmid=m.id
+                    minWm=wm
+            self.solution.jobs[j[0]].operations[j[1]].machine.id=mindex
+            aaaaa=55
+
     def update(self,assignment,a):#completed
         for j in assignment:
             self.solution.jobs[j[0]].operations[j[1]].ost=self.nextTime
@@ -64,17 +78,24 @@ class createSolution:
             #print self.freeMahchinesSet
         #print self.nextEventsSet
     def findNextTimeandEvents(self):
-
+        self.releasedOpSet=list()
+        self.machineEventSet=list()
+        z= min(self.nextEventsSet, key=lambda tup: tup[2])
+        self.nextTime=z[2]
         for j in self.nextEventsSet:
             if j[3]=='r' :
-                self.releasedOpSet.append(j[:3])
+                self.releasedOpSet.append(j)
             else:
-                pass
+                self.notFinishedOpSet.remove(j[:2])
+                self.freeMahchinesSet.append(j[3])
+                self.machineEventSet.append(j[3])
             #self.notFinishedOpSet.remove()#how to delete a row.
             #self.freeMahchinesSet.append('machine.id')#is it True?
             #self.machineEventSet.append('machine.id')#is it True?
 
+    def updateMachineSet(self):
 
+        pass
     def simulatedSolution(self):
         self.initialization()
         self.nextTime=self.currentTime
@@ -85,16 +106,21 @@ class createSolution:
         self.solution.jobs[z[0]].operations[z[1]].machineId=assignedMachineId
         self.solution.jobs[z[0]].operations[z[1]].ost=self.nextTime
         self.solution.jobs[z[0]].operations[z[1]].oft=self.solution.jobs[z[0]].operations[z[1]].ost+self.problem.jobs[z[0]].operations[z[1]].processingTimes[a]
-        self.assignment.append([z[0],z[1],assignedMachineId])
+        self.assignment.append([z[0],z[1],assignedMachineId,'r'])
         print self.solution.jobs[z[0]].id,self.solution.jobs[z[0]].operations[z[1]].id,self.solution.jobs[z[0]].operations[z[1]].machineId
         self.update(self.assignment,a)
-        #self.nextEventsSet.remove()
-        self.findNextTimeandEvents()
+        for i in self.nextEventsSet:
+            for j in self.assignment:
+                if (i[0]==j[0]) and (i[1]== j[1]) and (i[3]==j[3]) :
+                    self.nextEventsSet.remove(i)
 
-        while self.notFinishedOpSet>0:
-            for j in self.releasedOpSet:
-                if j[2]<=self.currentTime:
-                    self.LeastWaitingTimeAssignment()
+
+        while len(self.notFinishedOpSet)>0:
+            self.findNextTimeandEvents()
+            self.currentTime=self.nextTime
+            if len(self.releasedOpSet)>0:
+                self.LeastWaitingTimeAssignment()
+
 
             pass
 
