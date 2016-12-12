@@ -39,6 +39,7 @@ class createSolution:
 
 
     def LeastWaitingTimeAssignment(self):
+        lastAssigned=list()
         for j in self.releasedOpSet:
             minWm=1000000000
             mindex=0
@@ -54,20 +55,23 @@ class createSolution:
                 if wm<minWm:
                     minmid=m.id
                     minWm=wm
-            self.solution.jobs[j[0]].operations[j[1]].machine.id=mindex
-            aaaaa=55
+            self.solution.jobs[j[0]].operations[j[1]].machine.id=minmid
+            self.solution.machines[minmid].mwlm.append([j[0],j[1]])
+            lastAssigned.append([j[0],j[1],minmid])#hold last assigned operation and machine
+            return lastAssigned
+
 
     def update(self,assignment,a):#completed
         for j in assignment:
             self.solution.jobs[j[0]].operations[j[1]].ost=self.nextTime
-            mid=self.solution.jobs[j[0]].operations[j[1]].machineId
+            mid=self.solution.jobs[j[0]].operations[j[1]].machine.id
             self.solution.jobs[j[0]].operations[j[1]].oft=self.solution.jobs[j[0]].operations[j[1]].ost+self.problem.jobs[j[0]].operations[j[1]].processingTimes[a]
             self.nextEventsSet.append([j[0],j[1],self.solution.jobs[j[0]].operations[j[1]].oft,mid])
             if j[1]!=self.problem.nm:
                 releaseTime=self.solution.jobs[j[0]].operations[j[1]].oft
                 self.solution.jobs[j[0]].operations[j[1]+1].oreleaseTime=releaseTime
                 self.nextEventsSet.append([j[0],j[1]+1,releaseTime,'r'])
-            self.solution.machines[mid].mwlm.append([j[0],j[1]])
+            self.solution.machines[mid].mwlm.remove(j[:2])
             self.solution.machines[mid].mwlwm +=self.problem.jobs[j[0]].operations[j[1]].processingTimes[a]#add workload to machine has mid
             self.solution.machines[mid].mlst=self.solution.jobs[j[0]].operations[j[1]].ost
             self.solution.machines[mid].mlft=self.solution.jobs[j[0]].operations[j[1]].oft
@@ -88,14 +92,53 @@ class createSolution:
             else:
                 self.notFinishedOpSet.remove(j[:2])
                 self.freeMahchinesSet.append(j[3])
-                self.machineEventSet.append(j[3])
+                self.machineEventSet.append(j)
             #self.notFinishedOpSet.remove()#how to delete a row.
             #self.freeMahchinesSet.append('machine.id')#is it True?
             #self.machineEventSet.append('machine.id')#is it True?
 
-    def updateMachineSet(self):
+    def updateMachineSet(self,lastAssigned,machineEventSet):
+        start=list()
+        if len(lastAssigned)>0:
+            for j in lastAssigned:
+                if j[2] in self.freeMahchinesSet:
+                    mindex=j[2]
+                    for index,m in enumerate(self.problem.jobs[j[0]].operations[j[1]].machineSet):
+                        if m.id==mindex:#find order machine id that given in machineSet
+                            order=index
+                    processingTime=self.problem.jobs[j[0]].operations[j[1]].processingTimes[order]
+                    #self.solution.jobs[j[0]].operations[j[1]].ost=self.currentTime
+                    #self.solution.jobs[j[0]].operations[j[1]].oft=self.currentTime+processingTime
+                    #self.solution.machines[mindex].mlst=self.currentTime
+                    #self.solution.machines[mindex].mlft=self.currentTime+processingTime
+                    self.solution.machines[mindex].mwlwm+=processingTime
+                    start.append([j[0],[1],[mindex]])
+                    #self.solution.machines[j[2]].mwlm.remove(j[:2])3
+                else:
+                    self.solution.machines[j[2]].mwlm.append([j[0],j[1]])
+                    self.solution.machines[j[2]].mwlwm+=processingTime
+        for i in machineEventSet:
+            j = self.solution.machines[i[3]].mwlm
+            if len(j)>0:
+                for index,m in enumerate(self.problem.jobs[j[0][0]].operations[j[0][1]].machineSet):
+                    if m.id==i[3]:#find order machine id that given in machineSet
+                        order=index
+                processingTime=self.problem.jobs[j[0][0]].operations[j[0][1]].processingTimes[order]
+                '''self.solution.jobs[j[0][0]].operations[j[0][1]].ost=i[2]
+                self.solution.jobs[j[0][0]].operations[j[0][1]].oft=i[2]+processingTime
+                self.solution.machines[i[3]].mlst=i[2]
+                self.solution.machines[i[3]].mlft=i[2]+processingTime
+                self.solution.machines[i[3]].mwlwm+=processingTime#assigned twice, i think wrong, check it.
+                self.solution.machines[i[3]].mwlm.remove(j[0])
+                '''
+                self.solution.machines[i[3]].mwlm.append([j[0],j[1]])
+                self.solution.machines[i[3]].mwlwm+=processingTime
+                start.append([j[0],j[1],i[3]])
 
-        pass
+                aaaaa=77
+        return start
+
+
     def simulatedSolution(self):
         self.initialization()
         self.nextTime=self.currentTime
@@ -104,9 +147,11 @@ class createSolution:
         a=np.random.randint(0,lena)
         assignedMachineId=self.problem.jobs[z[0]].operations[z[1]].machineSet[a].id
         self.solution.jobs[z[0]].operations[z[1]].machineId=assignedMachineId
+        self.solution.jobs[z[0]].operations[z[1]].machine.id=assignedMachineId
         self.solution.jobs[z[0]].operations[z[1]].ost=self.nextTime
         self.solution.jobs[z[0]].operations[z[1]].oft=self.solution.jobs[z[0]].operations[z[1]].ost+self.problem.jobs[z[0]].operations[z[1]].processingTimes[a]
         self.assignment.append([z[0],z[1],assignedMachineId,'r'])
+        self.solution.machines[assignedMachineId].mwlm.append(z[:2])
         print self.solution.jobs[z[0]].id,self.solution.jobs[z[0]].operations[z[1]].id,self.solution.jobs[z[0]].operations[z[1]].machineId
         self.update(self.assignment,a)
         for i in self.nextEventsSet:
@@ -119,10 +164,16 @@ class createSolution:
             self.findNextTimeandEvents()
             self.currentTime=self.nextTime
             if len(self.releasedOpSet)>0:
-                self.LeastWaitingTimeAssignment()
+                lastAssigned=self.LeastWaitingTimeAssignment()
+            start=self.updateMachineSet(lastAssigned,self.machineEventSet)
+            for j in start:
+                self.update(start,1)
+            for i in self.nextEventsSet:
+                for j in self.start:
+                    if (i[0]==j[0]) and (i[1]== j[1]):
+                        self.nextEventsSet.remove(i)
 
 
-            pass
 
 
 
