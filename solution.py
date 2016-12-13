@@ -7,6 +7,7 @@ class Machine:
         self.mlft=0
         self.mwlm=list()
         self.mwlwm=0
+        self.assigmentOperation=list()
 
 class Operation:
     def __init__(self):
