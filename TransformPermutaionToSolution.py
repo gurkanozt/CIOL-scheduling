@@ -16,6 +16,7 @@ class tranformation():
         preEndTime=0#finish time of previous operation in the permutation
         indexa=0
         cc=np.random.rand(problem.nj,3)
+        '''
         for i in solution.order:
             job = i[0]#assign job to job id
             op = i[1]#assign op to operation id
@@ -35,6 +36,25 @@ class tranformation():
 
 
             self.colors.append(cc[job])
+
+            indexa=indexa+1
+        '''
+        for i in solution.jobs:
+            for j in i.operations:
+                job = i.id#assign job to job id
+                op = j.id#assign op to operation id
+                mak = j.machine.id#assign mak to machine id
+                machineEndTime = j.oft #find machine latest finish time
+                startTime = j.ost#define current job start time
+
+                self.machineName.append(mak)#add machine id to machinename set
+                self.startTime.append(startTime)#add operation start time to startTime set
+                self.finishTime.append(machineEndTime)#add operation finish time to finishTime set
+                self.names.append([mak, startTime, machineEndTime, "O_"+str(job)+str(op)])#add operation name to names set
+
+
+
+                self.colors.append(cc[job])
 
             indexa=indexa+1
         print "aa"
@@ -87,3 +107,4 @@ class tranformation():
             k +=1
         plt.show()
 '''
+0

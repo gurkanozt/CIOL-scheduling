@@ -16,6 +16,7 @@ class createSolution:
         self.currentTime=0
         self.nextTime=0
         self.assignment=list()#it is necessary to hold assigned object
+        self.lastAssigned=list()
 
 
 
@@ -24,7 +25,8 @@ class createSolution:
         for j in self.problem.jobs:
             for o in j.operations:
                 self.notFinishedOpSet.append([j.id, o.id])
-                self.notReleasedOpSet.append([j.id, o.id])
+                if o.id!=0:
+                    self.notReleasedOpSet.append([j.id, o.id])
         #self.notReleasedOpSet = self.notFinishedOpSet
         for m in range(self.problem.nm):
             self.freeMahchinesSet.append(m)#define machine as free
@@ -41,7 +43,7 @@ class createSolution:
 
 
     def LeastWaitingTimeAssignment(self):
-        lastAssigned=list()
+        self.lastAssigned=list()
         for j in self.releasedOpSet:
             minWm=1000000000
             mindex=0
@@ -63,8 +65,8 @@ class createSolution:
             self.solution.machines[minmid].mwlm.append([j[0],j[1]])
             self.solution.machines[minmid].mwlwm+=self.problem.jobs[j[0]].operations[j[1]].processingTimes[a]
             self.solution.machines[minmid].assigmentOperation.append([j[0],j[1]])
-            lastAssigned.append([j[0],j[1],minmid])#hold last assigned operation and machine
-            return lastAssigned
+            self.lastAssigned.append([j[0],j[1],minmid])#hold last assigned operation and machine
+            self.nextEventsSet.remove([j[0],j[1],self.currentTime,'r'])
 
 
     def update(self,assignment):#completed
@@ -81,7 +83,7 @@ class createSolution:
                 self.solution.jobs[j[0]].operations[j[1]+1].oreleaseTime=releaseTime
                 self.nextEventsSet.append([j[0],j[1]+1,releaseTime,'r'])
             self.solution.machines[mid].mwlm.remove(j[:2])
-            self.solution.machines[mid].mwlwm -=self.problem.jobs[j[0]].operations[j[1]].processingTimes[order]#add workload to machine has mid
+            self.solution.jobs[j[0]].operations[j[1]].processingTime =self.problem.jobs[j[0]].operations[j[1]].processingTimes[order]#add workload to machine has mid
             self.solution.machines[mid].mlst=self.solution.jobs[j[0]].operations[j[1]].ost
             self.solution.machines[mid].mlft=self.solution.jobs[j[0]].operations[j[1]].oft
             self.freeMahchinesSet.remove(mid)
@@ -100,8 +102,11 @@ class createSolution:
             if j[2]==self.nextTime:
                 if j[3]=='r' :
                     self.releasedOpSet.append(j)
+                    #self.notReleasedOpSet.remove(j[:2])
                 else:
                     self.notFinishedOpSet.remove(j[:2])
+                    self.nextEventsSet.remove(j)
+                    self.solution.machines[j[3]].mwlwm-=self.solution.jobs[j[0]].operations[j[1]].processingTime
                     self.freeMahchinesSet.append(j[3])
                     self.machineEventSet.append(j)
                 #self.notFinishedOpSet.remove()#how to delete a row.
@@ -124,15 +129,22 @@ class createSolution:
                 self.solution.machines[mindex].mlft=self.currentTime+processingTime
                 self.solution.machines[mindex].mwlwm-=processingTime
                 '''
-
-                for i in lastStarted:
-                    if i[0]!=j[0] or i[1]!=j[1] or i[2]!=mindex:
-                        lastStarted.append([j[0],j[1],mindex])
+                lastStarted.append([j[0],j[1],mindex])
+                for i in self.nextEventsSet:
+                    if i[0]==j[0] and i[1]==j[1] and i[3]=='r':
+                        self.nextEventsSet.remove(i)
                 #self.solution.machines[j[2]].mwlm.remove(j[:2])3
                 #self.solution.machines[j[2]].mwlm.remove(j[:2])
+
         for i in machineEventSet:#used FIFO rule
-            j = self.solution.machines[i[3]].mwlm
-            if len(j)>0:
+            for l in lastStarted:
+                if i[3]!=l[2] and len(self.solution.machines[i[3]].mwlm)>0 :
+                    k = self.solution.machines[i[3]].mwlm
+                    lastStarted.append([k[0][0],k[0][1],i[3]])
+            if len(lastStarted)<1:
+                k = self.solution.machines[i[3]].mwlm
+                if len(k)>0:
+                    lastStarted.append([k[0][0],k[0][1],i[3]])
                 '''for index,m in enumerate(self.problem.jobs[j[0][0]].operations[j[0][1]].machineSet):
                     if m.id==i[3]:#find order machine id that given in machineSet
                         order=index
@@ -144,11 +156,6 @@ class createSolution:
                 self.solution.machines[i[3]].mwlwm-=processingTime#assigned twice, i think wrong, check it.
                 self.solution.machines[i[3]].mwlm.remove(j[0])
                 '''
-                for i in lastStarted:
-                    if i[0]!=j[0][0] or i[1]!=j[0][1] or i[2]!=i[3]:
-                        lastStarted.append([j[0][0],j[0][1],i[3]])
-
-
 
         return lastStarted
 
@@ -174,17 +181,26 @@ class createSolution:
         for i in self.nextEventsSet:
             if i[2]==self.currentTime:
                 self.nextEventsSet.remove(i)
+        bbb=0
         while len(self.notFinishedOpSet)>0:
             self.findNextTimeandEvents()
             self.currentTime=self.nextTime
             if len(self.releasedOpSet)>0:
-                lastAssigned=self.LeastWaitingTimeAssignment()
-            lastStarted=self.updateMachineSet(lastAssigned,self.machineEventSet)
-            for j in lastStarted:
+                self.LeastWaitingTimeAssignment()
+            lastStarted=self.updateMachineSet(self.lastAssigned,self.machineEventSet)
+            self.lastAssigned=list()
+            if len(lastStarted)>0:
                 self.update(lastStarted)
-            for i in self.nextEventsSet:
-                if i[2]==self.currentTime:
+
+            '''for i in self.nextEventsSet:
+                if i[2]==self.currentTime and i[3]=='r':
                     self.nextEventsSet.remove(i)
+'''
+            bbb+=1
+            if bbb==110:
+                aaaaa=11
+
+        return self.solution
 
 
 
