@@ -47,10 +47,10 @@ class tranformation():
                 machineEndTime = j.oft #find machine latest finish time
                 startTime = j.ost#define current job start time
 
-                self.machineName.append(mak)#add machine id to machinename set
+                self.machineName.append(mak+1)#add machine id to machinename set
                 self.startTime.append(startTime)#add operation start time to startTime set
                 self.finishTime.append(machineEndTime)#add operation finish time to finishTime set
-                self.names.append([mak, startTime, machineEndTime, "O_"+str(job)+str(op)])#add operation name to names set
+                self.names.append([mak+1, startTime, machineEndTime, "J"+str(job+1)+"O"+str(op+1)])#add operation name to names set
 
 
 
