@@ -25,6 +25,7 @@ class Job:
         self.operations = list()
         self.startTime = -1
         self.finishTime = 0
+        self.dueDate=0
 
 
 class Solution(Operation, Job, Machine):
@@ -44,7 +45,7 @@ class Solution(Operation, Job, Machine):
         for j in problem.jobs:
             sjob = Job()#define sjob as class
             sjob.id = j.id#assign job id
-
+            sjob.dueDate=j.dueDate
             for o in j.operations:
                 sop = Operation()#define sop as class
                 sop.id = o.id#assign operation id

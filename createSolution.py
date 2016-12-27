@@ -1,6 +1,7 @@
 import numpy as np
 import dispatchingRules as DR
 import TransformPermutaionToSolution as TS
+import evaluation as EV
 class createSolution:
 
     def __init__(self, problem,solution):
@@ -190,8 +191,10 @@ class createSolution:
                     if i[2]==self.currentTime and i[3]=='r':
                         self.nextEventsSet.remove(i)
     '''
-            a=TS.tranformation(self.problem,self.solution)
+            #a=TS.tranformation(self.problem,self.solution)
+            mal=EV.Evaluation(self.solution)
 
+            print d,mal[0],mal[1]
 
         #return self.solution
 
