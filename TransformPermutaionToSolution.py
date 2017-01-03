@@ -3,7 +3,7 @@ import matplotlib as mpl
 import schedulingProblem as SP
 import solution as SS
 import numpy as np
-from matplotlib.widgets import Slider
+
 
 class tranformation():
     def __init__(self,problem,solution):

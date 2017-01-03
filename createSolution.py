@@ -32,7 +32,7 @@ class createSolution:
         #self.notReleasedOpSet = self.notFinishedOpSet
         for m in range(self.problem.nm):
             self.freeMahchinesSet.append(m)#define machine as free
-            self.machineWaitingList.append([])
+            #self.machineWaitingList.append([])
 
         for j in self.problem.jobs:
             self.nextEventsSet.append([j.id ,0,j.releaseTime,'r'])
@@ -100,6 +100,7 @@ class createSolution:
         if len(self.nextEventsSet):
             z= min(self.nextEventsSet, key=lambda tup: tup[2])
             self.nextTime=z[2]
+        '''
         for j in self.nextEventsSet:
             if j[2]==self.nextTime:
                 if j[3]=='r' :
@@ -114,6 +115,16 @@ class createSolution:
                 #self.notFinishedOpSet.remove()#how to delete a row.
                 #self.freeMahchinesSet.append('machine.id')#is it True?
                 #self.machineEventSet.append('machine.id')#is it True?
+        '''
+        if z[3]=='r':
+            self.releasedOpSet.append(z)
+            #self.notReleasedOpSet.remove(z[:2])
+        else:
+            self.notFinishedOpSet.remove(z[:2])
+            self.nextEventsSet.remove(z)
+            self.solution.machines[z[3]].mwlwm-=self.solution.jobs[z[0]].operations[z[1]].processingTime
+            self.freeMahchinesSet.append(z[3])
+            self.machineEventSet.append(z)
 
     def updateMachineSet(self,lastAssigned,machineEventSet,d):
         lastStarted=list()
@@ -134,6 +145,7 @@ class createSolution:
                 lastStarted.append([j[0],j[1],mindex])
                 for i in self.nextEventsSet:
                     if i[0]==j[0] and i[1]==j[1] and i[3]=='r':
+
                         self.nextEventsSet.remove(i)
                 #self.solution.machines[j[2]].mwlm.remove(j[:2])3
                 #self.solution.machines[j[2]].mwlm.remove(j[:2])
@@ -146,7 +158,7 @@ class createSolution:
             '''
             #if len(lastStarted)<1:
             k = self.solution.machines[i[3]].mwlm
-            if len(k)>0:
+            if len(k)>0 :
                 result=DR.dispatchingRules(k,self.solution,self.problem,i[3],d)
                 lastStarted.append(result[0])
 
@@ -191,7 +203,7 @@ class createSolution:
                     if i[2]==self.currentTime and i[3]=='r':
                         self.nextEventsSet.remove(i)
     '''
-            #a=TS.tranformation(self.problem,self.solution)
+            a=TS.tranformation(self.problem,self.solution)
             mal=EV.Evaluation(self.solution)
 
             print d,mal[0],mal[1]
