@@ -79,8 +79,9 @@ class createSolution:
                 if m.id==mid:#find order machine id that given in machineSet
                     order=index
             self.solution.jobs[j[0]].operations[j[1]].oft=self.solution.jobs[j[0]].operations[j[1]].ost+self.problem.jobs[j[0]].operations[j[1]].processingTimes[order]
+            self.solution.jobs[j[0]].finishTime=self.solution.jobs[j[0]].operations[j[1]].oft
             self.nextEventsSet.append([j[0],j[1],self.solution.jobs[j[0]].operations[j[1]].oft,mid])
-            if j[1]+1<self.problem.nm:
+            if j[1]+1<5:
                 releaseTime=self.solution.jobs[j[0]].operations[j[1]].oft
                 self.solution.jobs[j[0]].operations[j[1]+1].oreleaseTime=releaseTime
                 self.nextEventsSet.append([j[0],j[1]+1,releaseTime,'r'])
@@ -205,8 +206,8 @@ class createSolution:
     '''
             a=TS.tranformation(self.problem,self.solution)
             mal=EV.Evaluation(self.solution)
-
-            print d,mal[0],mal[1]
+            print "Dispatching Rule: ",d,"Cmax: ",mal[0],"MeanLateness: ",mal[1][0],"MeanFlowTime: ",mal[1][1]
+            #print d,mal[0],mal[1][0],mal[1][1]
 
         #return self.solution
 

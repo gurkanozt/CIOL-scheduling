@@ -5,7 +5,7 @@ import createSolution as CS
 
 
 
-pr1 = SP.FJSSP(10, 100, 1.1, 1)#generate problem
+pr1 = SP.FJSSP(3, 5, 1.1, 1)#generate problem
 
 pr1.printTable()#call print function from schedulingProblem file
 s1 = SS.Solution(pr1)#call solution function from solution file

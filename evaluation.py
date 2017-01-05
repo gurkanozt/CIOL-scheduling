@@ -17,7 +17,32 @@ def Evaluation(solution):
             msl+=math.pow((duedate-finishedTime),2)
         msl=msl/len(solution.jobs)
         return msl
+    def Makespan():
+        Cmax=0
+        for j in solution.jobs:
+            a=j.finishTime
+            if a>Cmax:
+                Cmax=a
+        return Cmax
+    def ML():
+        ml=0
+        mft=0
+        for i in solution.jobs:
+            duedate=i.dueDate
+            start=i.operations[0].ost
+            finishedTime=i.finishTime
+            if finishedTime>duedate:
+                ml+= finishedTime-duedate
+            mft+=finishedTime-start
+        ml=ml/len(solution.jobs)
+        mft=mft/len(solution.jobs)
 
+        return ml,mft
+    def MFT():#Mean Flow Time
+
+        pass
     a=MAL()
     b=MSL()
-    return a,b
+    c=Makespan()
+    d=ML()
+    return c,d

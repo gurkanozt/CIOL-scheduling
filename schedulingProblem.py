@@ -30,7 +30,9 @@ class FJSSP:
         self.averageProcessingTime =0
         #self.createDataFSSP()#create data for FJSSP
         #self.createDataFJSSP()
-        self.readJSSP()
+        self.readFJSSP()
+        aaaa=4
+        #self.readFSSP()
     def createDataFSSP(self):#create data for FJSSP
         for j in range(self.nj):
             job = self.job()#define job as class
@@ -134,7 +136,60 @@ class FJSSP:
                 self.jobs.append(job)
             row+=1
 
+    def readFJSSP(self):
+        f = open("Behnke35.fjs", "r")
+        row=1
+        for line in f:
+            lines=line.split(' ')
+            if row ==1:
+                pass
+                self.nj=int(lines[0])
+                self.nm=int(lines[1])
 
+            else:
+                job = self.job()#define job as class
+                job.id=row-2# assign jobs id
+                numberOfOperations = self.nm
+
+                lines=line.split(' ')
+                r=int(lines[2])
+                bb=3
+                k=0
+                while k<5:
+                    operation = self.operation()#define operation as class
+
+                    count=0
+                    operation.id=k
+                    for i in range(r):
+
+                         #assign operations id
+                        machine = self.machine()#define machine as class
+                        machine.id = int(lines[bb+count+i])-1#assign machine id
+                        operation.machineSet.append(machine)#add machine objects to operations assignable machines set
+                        t = float(lines[bb+count+i+1])#define each operations processing time
+                        operation.processingTimes.append(t)#add processing time to each operation
+                        #add operation objects to jobs
+                        count+=1
+                    job.operations.append(operation)
+                    if k<4:
+                        r=int(lines[bb+count+1+i])
+                        bb=bb+count+i+2
+                    k+=1
+
+                if self.nj>50:
+                    releaseTime = np.random.uniform(0, 40)#generate jobs release time
+                else:
+                    releaseTime = np.random.uniform(0, 20)
+                job.releaseTime = releaseTime#assign release time to jobs
+
+                job.averageProcessingTime=0
+                for o in job.operations:
+                    job.averageProcessingTime += np.average(o.processingTimes)#calculate jobs average processing time
+
+                dueDate = releaseTime + self.c * job.averageProcessingTime#calculate jobs due date according to TWK method
+                job.dueDate = dueDate#assign due date to jobs
+                self.jobs.append(job)
+            row+=1
     def printTable(self):# print problem set
         for j in self.jobs:
             print "JOB :\t", j.id, "\t", round(j.releaseTime,2), round(j.dueDate,2),"\n"
