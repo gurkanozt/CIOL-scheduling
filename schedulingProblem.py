@@ -29,8 +29,8 @@ class FJSSP:
         self.jobs = list()#jobs set in problem set
         self.averageProcessingTime =0
         #self.createDataFSSP()#create data for FJSSP
-        #self.createDataFJSSP()
-        self.readFJSSP()
+        self.createDataFJSSP()
+        #self.readFJSSP()
         aaaa=4
         #self.readFSSP()
     def createDataFSSP(self):#create data for FJSSP
