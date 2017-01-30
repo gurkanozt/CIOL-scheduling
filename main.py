@@ -3,19 +3,21 @@ import solution as SS
 import TransformPermutaionToSolution as TS
 import createSolution as CS
 
+flexible=[0.2,0.4,0.6,0.8,1]
+dueDateParameter=[1.2,1.5,2]
+for i in flexible:
+    for j in dueDateParameter:
+        pr1 = SP.FJSSP(10, 10, j, i)#generate problem
 
+        pr1.printTable()#call print function from schedulingProblem file
+        s1 = SS.Solution(pr1)#call solution function from solution file
+        cs1 = CS.createSolution(pr1,s1)
+        #s2 = cs1.randomSolution(s1)
+        #cs1.initialization()
+        ab=cs1.simulatedSolution()
 
-pr1 = SP.FJSSP(10, 100, 1.1, 1)#generate problem
-
-pr1.printTable()#call print function from schedulingProblem file
-s1 = SS.Solution(pr1)#call solution function from solution file
-cs1 = CS.createSolution(pr1,s1)
-#s2 = cs1.randomSolution(s1)
-#cs1.initialization()
-ab=cs1.simulatedSolution()
-
-#a=TS.tranformation(pr1,ab)#call transformation function from TranformPermutationToSolution file
-#print s1.order, "\n"#print solution
+        #a=TS.tranformation(pr1,ab)#call transformation function from TranformPermutationToSolution file
+        #print s1.order, "\n"#print solution
 
 
 

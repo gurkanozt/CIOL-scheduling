@@ -1,7 +1,10 @@
 from matplotlib import pyplot
 import pylab
 from mpl_toolkits.mplot3d import Axes3D
-import random
+import matplotlib.pyplot as plt
+
+
+import numpy as np
 def sorting(nonDominated):
     '''
     for i in range(len(nonDominated)):
@@ -29,19 +32,42 @@ def sorting(nonDominated):
     for k in range(3):
         aa.append(abc.count(k))
     print aa
-    fig = pylab.figure()
-    ax = Axes3D(fig)
-
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
     sequence_containing_x_vals =list()
     sequence_containing_y_vals =list()
     sequence_containing_z_vals =list()
+    marker=list()
+    color=list()
+    size=list()
+    for i in range(len(nonDominated)):
+        if i<len(nonDominated)/3:
+            marker.append('o')
+            color.append('red')
+            size.append(300)
+        elif i>=len(nonDominated)/3 and i<2*(len(nonDominated))/3:
+            marker.append('1')
+            color.append('green')
+            size.append(200)
 
-    for n in nonDominated:
+        else:
+            marker.append('2')
+            color.append('blue')
+            size.append(100)
 
+    for index,n in enumerate(nonDominated):
         sequence_containing_x_vals.append(n[0])
         sequence_containing_y_vals.append(n[1])
         sequence_containing_z_vals.append(n[2])
+        m=marker[index]
+        c=color[index]
+        s=size[index]
+        ax.scatter(sequence_containing_x_vals, sequence_containing_y_vals, sequence_containing_z_vals, c=c, marker=m,s=s)
+
+    ax.set_xlabel('Cmax')
+    ax.set_ylabel('Mean Lateness')
+    ax.set_zlabel('Mean Flow Time')
+
+    plt.show()
 
 
-        ax.scatter(sequence_containing_x_vals, sequence_containing_y_vals, sequence_containing_z_vals)
-    pyplot.show()
