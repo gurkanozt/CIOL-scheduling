@@ -68,6 +68,6 @@ def sorting(nonDominated):
     ax.set_ylabel('Mean Lateness')
     ax.set_zlabel('Mean Flow Time')
 
-    plt.show()
+    #plt.show()
 
 

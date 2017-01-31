@@ -93,7 +93,16 @@ class FJSSP:
             for o in job.operations:
                 job.averageProcessingTime += np.average(o.processingTimes)#calculate jobs average processing time
 
-            dueDate = releaseTime + self.c * job.averageProcessingTime#calculate jobs due date according to TWK method
+            if self.c==0:
+                if j<self.nj/3:
+                    dueDate = releaseTime + 1.2 * job.averageProcessingTime
+                elif j>=self.nj/3 and j<(2*self.nj)/3:
+                    dueDate = releaseTime + 1.5 * job.averageProcessingTime
+                else:
+                    dueDate = releaseTime + 2.0 * job.averageProcessingTime
+
+            else:
+                dueDate = releaseTime + self.c * job.averageProcessingTime#calculate jobs due date according to TWK method
             job.dueDate = dueDate#assign due date to jobs
 
             self.jobs.append(job)#add job object to jobs set

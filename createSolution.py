@@ -168,51 +168,58 @@ class createSolution:
 
     def simulatedSolution(self):
         nonDominated=list()
+        Resultfile = open("result.txt","a")
         for d in range(0,3):
-            for h in range(10):
-                self.__init__(self.problem,self.solution)
-                self.initialization()
-                self.nextTime=self.currentTime
-                z= min(self.nextEventsSet, key=lambda tup: tup[2])#job in Evenset assigned to machines randomly
-                lena=len(self.problem.jobs[z[0]].operations[z[1]].machineSet)
-                a=np.random.randint(0,lena)
+            #for h in range(10):
+            self.__init__(self.problem,self.solution)
+            self.initialization()
+            self.nextTime=self.currentTime
+            z= min(self.nextEventsSet, key=lambda tup: tup[2])#job in Evenset assigned to machines randomly
+            lena=len(self.problem.jobs[z[0]].operations[z[1]].machineSet)
+            a=np.random.randint(0,lena)
 
-                assignedMachineId=self.problem.jobs[z[0]].operations[z[1]].machineSet[a].id
-              #  self.solution.jobs[z[0]].operations[z[1]].machineId=assignedMachineId
-              #  self.solution.jobs[z[0]].operations[z[1]].machine.id=assignedMachineId
-              #  self.solution.jobs[z[0]].operations[z[1]].ost=self.nextTime
-              #  self.solution.jobs[z[0]].operations[z[1]].oft=self.solution.jobs[z[0]].operations[z[1]].ost+self.problem.jobs[z[0]].operations[z[1]].processingTimes[a]
-              #  self.solution.machines[assignedMachineId].assigment.appen([z[0],z[1]])
-                self.assignment.append([z[0],z[1],assignedMachineId,'r'])
-                self.solution.machines[assignedMachineId].assigmentOperation.append(z[:2])
-                self.solution.machines[assignedMachineId].mwlm.append(z[:2])
-                self.solution.machines[assignedMachineId].mwlwm+=self.problem.jobs[z[0]].operations[z[1]].processingTimes[a]
-                print self.solution.jobs[z[0]].id,self.solution.jobs[z[0]].operations[z[1]].id,self.solution.jobs[z[0]].operations[z[1]].machineId
-                self.update(self.assignment)
-                for i in self.nextEventsSet:
-                    if i[2]==self.currentTime:
+            assignedMachineId=self.problem.jobs[z[0]].operations[z[1]].machineSet[a].id
+          #  self.solution.jobs[z[0]].operations[z[1]].machineId=assignedMachineId
+          #  self.solution.jobs[z[0]].operations[z[1]].machine.id=assignedMachineId
+          #  self.solution.jobs[z[0]].operations[z[1]].ost=self.nextTime
+          #  self.solution.jobs[z[0]].operations[z[1]].oft=self.solution.jobs[z[0]].operations[z[1]].ost+self.problem.jobs[z[0]].operations[z[1]].processingTimes[a]
+          #  self.solution.machines[assignedMachineId].assigment.appen([z[0],z[1]])
+            self.assignment.append([z[0],z[1],assignedMachineId,'r'])
+            self.solution.machines[assignedMachineId].assigmentOperation.append(z[:2])
+            self.solution.machines[assignedMachineId].mwlm.append(z[:2])
+            self.solution.machines[assignedMachineId].mwlwm+=self.problem.jobs[z[0]].operations[z[1]].processingTimes[a]
+            print self.solution.jobs[z[0]].id,self.solution.jobs[z[0]].operations[z[1]].id,self.solution.jobs[z[0]].operations[z[1]].machineId
+            self.update(self.assignment)
+            for i in self.nextEventsSet:
+                if i[2]==self.currentTime:
+                    self.nextEventsSet.remove(i)
+            while len(self.notFinishedOpSet)>0:
+                self.findNextTimeandEvents()
+                self.currentTime=self.nextTime
+                if len(self.releasedOpSet)>0:
+                    self.LeastWaitingTimeAssignment()
+                lastStarted=self.updateMachineSet(self.lastAssigned,self.machineEventSet,d)
+                self.lastAssigned=list()
+                if len(lastStarted)>0:
+                    self.update(lastStarted)
+
+                '''for i in self.nextEventsSet:
+                    if i[2]==self.currentTime and i[3]=='r':
                         self.nextEventsSet.remove(i)
-                while len(self.notFinishedOpSet)>0:
-                    self.findNextTimeandEvents()
-                    self.currentTime=self.nextTime
-                    if len(self.releasedOpSet)>0:
-                        self.LeastWaitingTimeAssignment()
-                    lastStarted=self.updateMachineSet(self.lastAssigned,self.machineEventSet,d)
-                    self.lastAssigned=list()
-                    if len(lastStarted)>0:
-                        self.update(lastStarted)
-
-                    '''for i in self.nextEventsSet:
-                        if i[2]==self.currentTime and i[3]=='r':
-                            self.nextEventsSet.remove(i)
-        '''
-                #a=TS.tranformation(self.problem,self.solution)
-                mal=EV.Evaluation(self.solution)
-                print "Dispatching Rule: ",d,"Cmax: ",mal[0],"MeanLateness: ",mal[1][0],"MeanFlowTime: ",mal[1][1]
-                nonDominated.append([mal[0],mal[1][0],mal[1][1]])
-            #print d,mal[0],mal[1][0],mal[1][1]
+    '''
+            #a=TS.tranformation(self.problem,self.solution)
+            mal=EV.Evaluation(self.solution)
+            print "Dispatching Rule: ",d,"Cmax: ",mal[0],"MeanLateness: ",mal[1][0],"MeanFlowTime: ",mal[1][1]
+            Resultfile.write(str(d)+ "\t")
+            Resultfile.write(str(mal[0])+ "\t")
+            Resultfile.write(str(mal[1][0])+ "\t")
+            Resultfile.write(str(mal[1][1])+ "\n")
+            nonDominated.append([mal[0],mal[1][0],mal[1][1]])
+        #print d,mal[0],mal[1][0],mal[1][1]
             print nonDominated
         nDominated=NDS.sorting(nonDominated)
+        Resultfile.close()
+
 
         #return self.solution
 
