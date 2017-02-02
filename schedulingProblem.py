@@ -104,7 +104,6 @@ class FJSSP:
             else:
                 dueDate = releaseTime + self.c * job.averageProcessingTime#calculate jobs due date according to TWK method
             job.dueDate = dueDate#assign due date to jobs
-
             self.jobs.append(job)#add job object to jobs set
     def readJSSP(self):
         f = open("1.csv", "r")

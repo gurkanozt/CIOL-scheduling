@@ -31,8 +31,8 @@ def Evaluation(solution):
             duedate=i.dueDate
             start=i.operations[0].ost
             finishedTime=i.finishTime
-            if finishedTime>duedate:
-                ml+= finishedTime-duedate
+            #if finishedTime>duedate:mutlak sapma yapildi
+            ml+= abs(finishedTime-duedate)
             mft+=finishedTime-start
         ml=ml/len(solution.jobs)
         mft=mft/len(solution.jobs)

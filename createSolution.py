@@ -160,7 +160,7 @@ class createSolution:
             #if len(lastStarted)<1:
             k = self.solution.machines[i[3]].mwlm
             if len(k)>0 :
-                result=DR.dispatchingRules(k,self.solution,self.problem,i[3],d)
+                result=DR.dispatchingRules(k,self.solution,self.problem,i[3],d,self.currentTime)
                 lastStarted.append(result[0])
 
 
@@ -169,7 +169,7 @@ class createSolution:
     def simulatedSolution(self):
         nonDominated=list()
         Resultfile = open("result.txt","a")
-        for d in range(0,3):
+        for dRulesID in range(0,6):
             #for h in range(10):
             self.__init__(self.problem,self.solution)
             self.initialization()
@@ -198,7 +198,7 @@ class createSolution:
                 self.currentTime=self.nextTime
                 if len(self.releasedOpSet)>0:
                     self.LeastWaitingTimeAssignment()
-                lastStarted=self.updateMachineSet(self.lastAssigned,self.machineEventSet,d)
+                lastStarted=self.updateMachineSet(self.lastAssigned,self.machineEventSet,dRulesID)
                 self.lastAssigned=list()
                 if len(lastStarted)>0:
                     self.update(lastStarted)
@@ -209,8 +209,8 @@ class createSolution:
     '''
             #a=TS.tranformation(self.problem,self.solution)
             mal=EV.Evaluation(self.solution)
-            print "Dispatching Rule: ",d,"Cmax: ",mal[0],"MeanLateness: ",mal[1][0],"MeanFlowTime: ",mal[1][1]
-            Resultfile.write(str(d)+ "\t")
+            print "Dispatching Rule: ",dRulesID,"Cmax: ",mal[0],"MeanLateness: ",mal[1][0],"MeanFlowTime: ",mal[1][1]
+            Resultfile.write(str(dRulesID)+ "\t")
             Resultfile.write(str(mal[0])+ "\t")
             Resultfile.write(str(mal[1][0])+ "\t")
             Resultfile.write(str(mal[1][1])+ "\n")
