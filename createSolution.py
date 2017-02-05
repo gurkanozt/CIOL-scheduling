@@ -3,6 +3,7 @@ import dispatchingRules as DR
 import TransformPermutaionToSolution as TS
 import evaluation as EV
 import nonDominatedSorting as NDS
+import geneExpression as GEP
 class createSolution:
 
     def __init__(self, problem,solution):
@@ -160,7 +161,8 @@ class createSolution:
             #if len(lastStarted)<1:
             k = self.solution.machines[i[3]].mwlm
             if len(k)>0 :
-                result=DR.dispatchingRules(k,self.solution,self.problem,i[3],d,self.currentTime)
+                #result=DR.dispatchingRules(k,self.solution,self.problem,i[3],d,self.currentTime)
+                result=GEP.GeneExtraction(k,self.solution,self.problem,i[3],d,self.currentTime)
                 lastStarted.append(result[0])
 
 
@@ -169,7 +171,7 @@ class createSolution:
     def simulatedSolution(self):
         nonDominated=list()
         Resultfile = open("result.txt","a")
-        for dRulesID in range(0,6):
+        for dRulesID in range(0,2):
             #for h in range(10):
             self.__init__(self.problem,self.solution)
             self.initialization()
