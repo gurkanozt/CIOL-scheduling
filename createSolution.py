@@ -6,7 +6,7 @@ import nonDominatedSorting as NDS
 import geneExpression as GEP
 class createSolution:
 
-    def __init__(self, problem,solution):
+    def __init__(self, problem,solution,visitindex):
         self.notReleasedOpSet = list()
         self.releasedOpSet = list()
         self.notFinishedOpSet = list()
@@ -21,6 +21,7 @@ class createSolution:
         self.nextTime=0
         self.assignment=list()#it is necessary to hold assigned object
         self.lastAssigned=list()
+        self.visitindex=visitindex
 
 
     def initialization(self):
@@ -162,7 +163,7 @@ class createSolution:
             k = self.solution.machines[i[3]].mwlm
             if len(k)>0 :
                 #result=DR.dispatchingRules(k,self.solution,self.problem,i[3],d,self.currentTime)
-                result=GEP.GeneExtraction(k,self.solution,self.problem,i[3],d,self.currentTime)
+                result=GEP.GeneExtraction(k,self.solution,self.problem,i[3],d,self.currentTime,self.visitindex)
                 lastStarted.append(result[0])
 
 
@@ -171,9 +172,11 @@ class createSolution:
     def simulatedSolution(self):
         nonDominated=list()
         Resultfile = open("result.txt","a")
+        Result=[[0] for i in xrange(2)]#it is depend on number of dispatching rules
+        #Result[0].append(0)
         for dRulesID in range(0,2):
             #for h in range(10):
-            self.__init__(self.problem,self.solution)
+            self.__init__(self.problem,self.solution,self.visitindex)
             self.initialization()
             self.nextTime=self.currentTime
             z= min(self.nextEventsSet, key=lambda tup: tup[2])#job in Evenset assigned to machines randomly
@@ -216,13 +219,14 @@ class createSolution:
             Resultfile.write(str(mal[0])+ "\t")
             Resultfile.write(str(mal[1][0])+ "\t")
             Resultfile.write(str(mal[1][1])+ "\n")
+            Result[dRulesID][0]+=(mal[0]+mal[1][0]+mal[1][1])
             nonDominated.append([mal[0],mal[1][0],mal[1][1]])
         #print d,mal[0],mal[1][0],mal[1][1]
             print nonDominated
-        nDominated=NDS.sorting(nonDominated)
+        #nDominated=NDS.sorting(nonDominated)
         Resultfile.close()
 
-
+        return Result
         #return self.solution
 
 

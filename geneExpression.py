@@ -1,10 +1,14 @@
 from __future__ import division
 import random
-def GeneExtraction(k,solution,problem,mid,rid,currentTime):
-    visit=0
+def GeneExtraction(k,solution,problem,mid,rid,currentTime,visit):
+    visita=visit
     GeneticRules=list()
+
     result=list()
-    if visit==0:
+    if visita==1:
+        ff=22
+    if visita==0:
+        gen = open("gen.txt","w")
         for i in range(0,10):
             headsize=10#parameter
             n=2#parameter
@@ -15,8 +19,8 @@ def GeneExtraction(k,solution,problem,mid,rid,currentTime):
             homeoticlength=5#parameter
             homeoticCount=0
             chromosomelength=geneCount*genelength+homeoticCount*homeoticlength
-            functioset=["+","-","*"]
-            terminalset=["p","P","dd","r","Re"]
+            functioset=["+","-","*","/"]
+            terminalset=["p","P","dd","r","Re","?"]
             chromosome=list()
             head=list()
             tail=list()
@@ -72,7 +76,7 @@ def GeneExtraction(k,solution,problem,mid,rid,currentTime):
                 else:
                     break
 
-
+            countDcNumber=0
             for i in range(len(codingArray[1])-1,-1,-1):
                 x=codingArray[1][i]
                 y=codingArray[2][i]
@@ -88,6 +92,12 @@ def GeneExtraction(k,solution,problem,mid,rid,currentTime):
                     else:
                         b=codingArray[3][y]
                     c=codingArray[0][i]
+                    if a=="?":
+                        a=str(chromosome[2][countDcNumber])
+                        countDcNumber+=1
+                    if b=="?":
+                        b=str(chromosome[2][countDcNumber])
+                        countDcNumber+=1
                     if a!=0 and b!=0:
                         if c=="+":
                             d=a+"+"+b
@@ -95,18 +105,28 @@ def GeneExtraction(k,solution,problem,mid,rid,currentTime):
                             d=a+"-"+b
                         elif c=="*":
                             d=a+"*"+b
-                        #elif c=="/":
-                            #d=a+"/"+b
+                        elif c=="/":
+                            d=a+"/"+"("+b+"+"+"0.000000001"+")"
                         else:
                             print "there is wrong something"
 
                         codingArray[3][i]="("+d+")"
                 else:
                     codingArray[3][i]=codingArray[0][i]
-            GeneticRules.append(codingArray[3][0])
+            #GeneticRules.append(codingArray[3][0])
+            gen.write(codingArray[3][0]+ "\n")
             visit+=1
+        gen.close()
 
+
+    asssss=22
+
+
+    abc=open("gen.txt","r")
     decisonList=list()
+
+    for line in abc:
+        GeneticRules.append(line)
     for mindex,j in  enumerate(k):
         dDate=problem.jobs[j[0]].dueDate
         rTime=problem.jobs[j[0]].releaseTime
@@ -135,6 +155,7 @@ def GeneExtraction(k,solution,problem,mid,rid,currentTime):
     z= min(decisonList, key=lambda tup: tup[1])
     index=z[0]
     result.append([k[index][0],k[index][1],mid])
+    abc.close()
     return result
 
 

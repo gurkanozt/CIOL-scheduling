@@ -10,8 +10,8 @@ geneCount=1#parameter
 homeoticlength=5#parameter
 homeoticCount=0
 chromosomelength=geneCount*genelength+homeoticCount*homeoticlength
-functioset=["+","-","*"]
-terminalset=["p","P","dd","r","Re"]
+functioset=["+","-","*","/"]
+terminalset=["p","P","dd","r","Re","?"]
 chromosome=list()
 head=list()
 tail=list()
@@ -66,7 +66,7 @@ for i in range(len(codingArray[1])-1,-1,-1):
     else:
         break
 
-
+countDcNumber=0
 for i in range(len(codingArray[1])-1,-1,-1):
     x=codingArray[1][i]
     y=codingArray[2][i]
@@ -83,14 +83,20 @@ for i in range(len(codingArray[1])-1,-1,-1):
             b=codingArray[3][y]
         c=codingArray[0][i]
         #if a!=0 and b!=0:
+        if a=="?":
+            a=str(chromosome[2][countDcNumber])
+            countDcNumber+=1
+        if b=="?":
+            b=str(chromosome[2][countDcNumber])
+            countDcNumber+=1
         if c=="+":
             d=a+"+"+b
         elif c=='-':
             d=a+"-"+b
         elif c=="*":
             d=a+"*"+b
-        #elif c=="/":
-            #d=a+"/"+b
+        elif c=="/":
+            d=a+"/"+"("+b+"+"+"0.000000001"+")"
         else:
             print "there is wrong something"
 
@@ -100,3 +106,4 @@ for i in range(len(codingArray[1])-1,-1,-1):
 GeneticRules.append(codingArray[3][0])
 print GeneticRules
 print codingArray
+print chromosome
