@@ -172,7 +172,7 @@ class createSolution:
     def simulatedSolution(self):
         nonDominated=list()
         Resultfile = open("result.txt","a")
-        Result=[[0] for i in xrange(2)]#it is depend on number of dispatching rules
+        Result=[0 for i in xrange(2)]#it is depend on number of dispatching rules
         #Result[0].append(0)
         for dRulesID in range(0,2):
             #for h in range(10):
@@ -193,7 +193,7 @@ class createSolution:
             self.solution.machines[assignedMachineId].assigmentOperation.append(z[:2])
             self.solution.machines[assignedMachineId].mwlm.append(z[:2])
             self.solution.machines[assignedMachineId].mwlwm+=self.problem.jobs[z[0]].operations[z[1]].processingTimes[a]
-            print self.solution.jobs[z[0]].id,self.solution.jobs[z[0]].operations[z[1]].id,self.solution.jobs[z[0]].operations[z[1]].machineId
+            #print self.solution.jobs[z[0]].id,self.solution.jobs[z[0]].operations[z[1]].id,self.solution.jobs[z[0]].operations[z[1]].machineId
             self.update(self.assignment)
             for i in self.nextEventsSet:
                 if i[2]==self.currentTime:
@@ -214,15 +214,15 @@ class createSolution:
     '''
             #a=TS.tranformation(self.problem,self.solution)
             mal=EV.Evaluation(self.solution)
-            print "Dispatching Rule: ",dRulesID,"Cmax: ",mal[0],"MeanLateness: ",mal[1][0],"MeanFlowTime: ",mal[1][1]
+            #print "Dispatching Rule: ",dRulesID,"Cmax: ",mal[0],"MeanLateness: ",mal[1][0],"MeanFlowTime: ",mal[1][1]
             Resultfile.write(str(dRulesID)+ "\t")
             Resultfile.write(str(mal[0])+ "\t")
             Resultfile.write(str(mal[1][0])+ "\t")
             Resultfile.write(str(mal[1][1])+ "\n")
-            Result[dRulesID][0]+=(mal[0]+mal[1][0]+mal[1][1])
-            nonDominated.append([mal[0],mal[1][0],mal[1][1]])
+            Result[dRulesID]+=(mal[0]+mal[1][0]+mal[1][1])/3
+            #nonDominated.append([mal[0],mal[1][0],mal[1][1]])
         #print d,mal[0],mal[1][0],mal[1][1]
-            print nonDominated
+            #print nonDominated
         #nDominated=NDS.sorting(nonDominated)
         Resultfile.close()
 

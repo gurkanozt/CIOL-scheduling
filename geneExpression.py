@@ -9,8 +9,8 @@ def GeneExtraction(k,solution,problem,mid,rid,currentTime,visit):
         ff=22
     if visita==0:
         gen = open("gen.txt","w")
-        for i in range(0,10):
-            headsize=10#parameter
+        for i in range(0,2):
+            headsize=5#parameter
             n=2#parameter
             tailsize=headsize*(n-1)+1
             dcsize=headsize
