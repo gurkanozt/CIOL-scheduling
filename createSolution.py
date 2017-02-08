@@ -6,7 +6,7 @@ import nonDominatedSorting as NDS
 import geneExpression as GEP
 class createSolution:
 
-    def __init__(self, problem,solution,visitindex):
+    def __init__(self, problem,solution,visitindex,GR):
         self.notReleasedOpSet = list()
         self.releasedOpSet = list()
         self.notFinishedOpSet = list()
@@ -22,6 +22,7 @@ class createSolution:
         self.assignment=list()#it is necessary to hold assigned object
         self.lastAssigned=list()
         self.visitindex=visitindex
+        self.GeneticRules=GR
 
 
     def initialization(self):
@@ -163,7 +164,37 @@ class createSolution:
             k = self.solution.machines[i[3]].mwlm
             if len(k)>0 :
                 #result=DR.dispatchingRules(k,self.solution,self.problem,i[3],d,self.currentTime)
-                result=GEP.GeneExtraction(k,self.solution,self.problem,i[3],d,self.currentTime,self.visitindex)
+                #result=GEP.GeneExtraction(k,self.solution,self.problem,i[3],d,self.currentTime,self.visitindex)
+                result=list()
+                decisonList=list()
+                for mindex,j in  enumerate(k):
+                    dDate=self.problem.jobs[j[0]].dueDate
+                    rTime=self.problem.jobs[j[0]].releaseTime
+                    totalProcessingTime=self.problem.jobs[j[0]].averageProcessingTime
+                    pastProcessingTimes=0
+                    for index,m in enumerate(self.problem.jobs[j[0]].operations[j[1]].machineSet):
+                        if m.id==i[3]:
+                            order=index
+                    operationProcessingTime=self.problem.jobs[j[0]].operations[j[1]].processingTimes[order]
+                    for h in self.solution.jobs[j[0]].operations:
+                        if h.id<j[1]:
+                            pastProcessingTimes+=h.processingTime
+                    remainingProcessingTime=totalProcessingTime-pastProcessingTimes
+
+
+                    p=operationProcessingTime
+                    P=totalProcessingTime
+                    dd=dDate
+                    r=rTime
+                    Re=remainingProcessingTime
+                    GDR=self.GeneticRules[d].fenotip[0][3][0]
+                    #GDR=GeneticRules[rid]
+                    a=eval(GDR)
+                    decisonList.append([mindex,a])
+
+                z= min(decisonList, key=lambda tup: tup[1])
+                index=z[0]
+                result.append([k[index][0],k[index][1],i[3]])
                 lastStarted.append(result[0])
 
 
@@ -172,11 +203,11 @@ class createSolution:
     def simulatedSolution(self):
         nonDominated=list()
         Resultfile = open("result.txt","a")
-        Result=[0 for i in xrange(2)]#it is depend on number of dispatching rules
+        Result=[ [] for i in xrange(20)]#it is depend on number of dispatching rules
         #Result[0].append(0)
-        for dRulesID in range(0,2):
+        for dRulesID in range(0,20):
             #for h in range(10):
-            self.__init__(self.problem,self.solution,self.visitindex)
+            self.__init__(self.problem,self.solution,self.visitindex,self.GeneticRules)
             self.initialization()
             self.nextTime=self.currentTime
             z= min(self.nextEventsSet, key=lambda tup: tup[2])#job in Evenset assigned to machines randomly
@@ -214,12 +245,15 @@ class createSolution:
     '''
             #a=TS.tranformation(self.problem,self.solution)
             mal=EV.Evaluation(self.solution)
-            #print "Dispatching Rule: ",dRulesID,"Cmax: ",mal[0],"MeanLateness: ",mal[1][0],"MeanFlowTime: ",mal[1][1]
+            print "Dispatching Rule: ",dRulesID,"Cmax: ",mal[0],"MeanLateness: ",mal[1][0],"MeanFlowTime: ",mal[1][1]
+            '''
             Resultfile.write(str(dRulesID)+ "\t")
             Resultfile.write(str(mal[0])+ "\t")
             Resultfile.write(str(mal[1][0])+ "\t")
             Resultfile.write(str(mal[1][1])+ "\n")
-            Result[dRulesID]+=(mal[0]+mal[1][0]+mal[1][1])/3
+            '''
+            Result[dRulesID]+=[dRulesID,mal[0],mal[1][0],mal[1][1]]
+
             #nonDominated.append([mal[0],mal[1][0],mal[1][1]])
         #print d,mal[0],mal[1][0],mal[1][1]
             #print nonDominated
