@@ -187,7 +187,7 @@ class createSolution:
                     dd=dDate
                     r=rTime
                     Re=remainingProcessingTime
-                    GDR=self.GeneticRules[d].fenotip[0][3][0]
+                    GDR=self.GeneticRules[d].fenotip[3][0]
                     #GDR=GeneticRules[rid]
                     a=eval(GDR)
                     decisonList.append([mindex,a])
@@ -202,7 +202,7 @@ class createSolution:
 
     def simulatedSolution(self):
         nonDominated=list()
-        Resultfile = open("result.txt","a")
+        #Resultfile = open("result.txt","a")
         Result=[ [] for i in xrange(20)]#it is depend on number of dispatching rules
         #Result[0].append(0)
         for dRulesID in range(0,20):
@@ -258,7 +258,7 @@ class createSolution:
         #print d,mal[0],mal[1][0],mal[1][1]
             #print nonDominated
         #nDominated=NDS.sorting(nonDominated)
-        Resultfile.close()
+        #Resultfile.close()
 
         return Result
         #return self.solution
