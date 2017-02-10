@@ -6,6 +6,14 @@ def dispatchingRules(k,solution,problem,mid,rid,currentTime):
     dRules.append([3,"MOOD"])
     dRules.append([4,"SPT+SRPT+SLK"])
     dRules.append([5,"ODD"])
+    dRules.append([6,"(((CR/((ODD*3)+0.000000001))*CRODD)+ODD)"])
+    dRules.append([7,"(ODD+(((CRODD-Re)+Re)+1))"])
+    dRules.append([8,"(ODD+Re)"])
+    dRules.append([9,"(P*Re)"])
+    dRules.append([10,"((ODD-(CRODD*(CRODD*CRODD)))*Re)"])
+    dRules.append([11,"((dd-(CRODD*(CRODD*CRODD)))*Re)"])
+    dRules.append([12,"(r+p+(2*P))"])
+    dRules.append(([13,"((7*P)+(11*p)+12*(nOps+r))"]))
     result=list()
     def FindOperationTime():
         pass
@@ -84,6 +92,172 @@ def dispatchingRules(k,solution,problem,mid,rid,currentTime):
         z= min(decisonList, key=lambda tup: tup[1])
         index=z[0]
         result.append([k[index][0],k[index][1],mid])
+    if rid>5:
+        decisonList=list()
+        for mindex,j in enumerate(k):
+            dDate=problem.jobs[j[0]].dueDate
+            rTime=problem.jobs[j[0]].releaseTime
+            ntotalProcessingTime=problem.jobs[j[0]].averageProcessingTime
+            npastProcessingTimes=0
+            for index,m in enumerate(problem.jobs[j[0]].operations[j[1]].machineSet):
+                if m.id==mid:
+                    order=index
+            operationProcessingTime=problem.jobs[j[0]].operations[j[1]].processingTimes[order]
+            for i in solution.jobs[j[0]].operations:
+                if i.id<j[1]:
+                    npastProcessingTimes+=i.processingTime
+            remainingProcessingTime=ntotalProcessingTime-npastProcessingTimes
+            nOps=problem.nm
+            p=operationProcessingTime
+            P=ntotalProcessingTime
+            dd=dDate
+            r=rTime
+            Re=remainingProcessingTime
+            SLK=dDate-currentTime-rTime
+            CR=(dDate-currentTime)/remainingProcessingTime
+            ODD=rTime+((dDate-rTime)*remainingProcessingTime)/ntotalProcessingTime
+            CRODD=(ODD-currentTime)/ntotalProcessingTime
+            a=eval(dRules[rid][1])
+            decisonList.append([mindex,a])
+        z= min(decisonList, key=lambda tup: tup[1])
+        index=z[0]
+        result.append([k[index][0],k[index][1],mid])
+    '''
+    if rid==7:
+        decisonList=list()
+        for mindex,j in enumerate(k):
+            dDate=problem.jobs[j[0]].dueDate
+            rTime=problem.jobs[j[0]].releaseTime
+            totalProcessingTime=problem.jobs[j[0]].averageProcessingTime
+            pastProcessingTimes=0
+            for i in solution.jobs[j[0]].operations:
+                if i.id<j[1]:
+                    pastProcessingTimes+=i.processingTime
+            remainingProcessingTime=totalProcessingTime-pastProcessingTimes
+            p=operationProcessingTime
+            P=totalProcessingTime
+            dd=dDate
+            r=rTime
+            SLK=dDate-currentTime-rTime
+            CR=(dDate-currentTime)/remainingProcessingTime
+            ODD=rTime+((dDate-rTime)*remainingProcessingTime)/totalProcessingTime
+            CRODD=(ODD-currentTime)/totalProcessingTime
+            a=eval(dRules[rid][1])
+            decisonList.append([mindex,a])
+        z= min(decisonList, key=lambda tup: tup[1])
+        index=z[0]
+    if rid==8:
+        decisonList=list()
+        for mindex,j in enumerate(k):
+            dDate=problem.jobs[j[0]].dueDate
+            rTime=problem.jobs[j[0]].releaseTime
+            totalProcessingTime=problem.jobs[j[0]].averageProcessingTime
+            pastProcessingTimes=0
+            for i in solution.jobs[j[0]].operations:
+                if i.id<j[1]:
+                    pastProcessingTimes+=i.processingTime
+            remainingProcessingTime=totalProcessingTime-pastProcessingTimes
+            p=operationProcessingTime
+            P=totalProcessingTime
+            dd=dDate
+            r=rTime
+            SLK=dDate-currentTime-rTime
+            CR=(dDate-currentTime)/remainingProcessingTime
+            ODD=rTime+((dDate-rTime)*remainingProcessingTime)/totalProcessingTime
+            CRODD=(ODD-currentTime)/totalProcessingTime
+            a=eval(dRules[rid][1])
+            decisonList.append([mindex,a])
+        z= min(decisonList, key=lambda tup: tup[1])
+        index=z[0]
+    if rid==9:
+        decisonList=list()
+        for mindex,j in enumerate(k):
+            dDate=problem.jobs[j[0]].dueDate
+            rTime=problem.jobs[j[0]].releaseTime
+            totalProcessingTime=problem.jobs[j[0]].averageProcessingTime
+            pastProcessingTimes=0
+            for i in solution.jobs[j[0]].operations:
+                if i.id<j[1]:
+                    pastProcessingTimes+=i.processingTime
+            remainingProcessingTime=totalProcessingTime-pastProcessingTimes
+            p=operationProcessingTime
+            P=totalProcessingTime
+            dd=dDate
+            r=rTime
+            SLK=dDate-currentTime-rTime
+            CR=(dDate-currentTime)/remainingProcessingTime
+            ODD=rTime+((dDate-rTime)*remainingProcessingTime)/totalProcessingTime
+            CRODD=(ODD-currentTime)/totalProcessingTime
+            a=eval(dRules[rid][1])
+            decisonList.append([mindex,a])
+        z= min(decisonList, key=lambda tup: tup[1])
+        index=z[0]
+    if rid==10:
+        decisonList=list()
+        for mindex,j in enumerate(k):
+            dDate=problem.jobs[j[0]].dueDate
+            rTime=problem.jobs[j[0]].releaseTime
+            totalProcessingTime=problem.jobs[j[0]].averageProcessingTime
+            pastProcessingTimes=0
+            for i in solution.jobs[j[0]].operations:
+                if i.id<j[1]:
+                    pastProcessingTimes+=i.processingTime
+            remainingProcessingTime=totalProcessingTime-pastProcessingTimes
+            p=operationProcessingTime
+            P=totalProcessingTime
+            dd=dDate
+            r=rTime
+            SLK=dDate-currentTime-rTime
+            CR=(dDate-currentTime)/remainingProcessingTime
+            ODD=rTime+((dDate-rTime)*remainingProcessingTime)/totalProcessingTime
+            CRODD=(ODD-currentTime)/totalProcessingTime
+            a=eval(dRules[rid][1])
+            decisonList.append([mindex,a])
+        z= min(decisonList, key=lambda tup: tup[1])
+        index=z[0]
+    if rid==11:
+        decisonList=list()
+        for mindex,j in enumerate(k):
+            dDate=problem.jobs[j[0]].dueDate
+            rTime=problem.jobs[j[0]].releaseTime
+            totalProcessingTime=problem.jobs[j[0]].averageProcessingTime
+            pastProcessingTimes=0
+            for i in solution.jobs[j[0]].operations:
+                if i.id<j[1]:
+                    pastProcessingTimes+=i.processingTime
+            remainingProcessingTime=totalProcessingTime-pastProcessingTimes
+            SLK=dDate-currentTime-rTime
+            CR=(dDate-currentTime)/remainingProcessingTime
+            ODD=rTime+((dDate-rTime)*remainingProcessingTime)/totalProcessingTime
+            CRODD=(ODD-currentTime)/totalProcessingTime
+            a=eval(dRules[rid][1])
+            decisonList.append([mindex,a])
+        z= min(decisonList, key=lambda tup: tup[1])
+        index=z[0]
+    if rid==12:
+        decisonList=list()
+        for mindex,j in enumerate(k):
+            dDate=problem.jobs[j[0]].dueDate
+            rTime=problem.jobs[j[0]].releaseTime
+            totalProcessingTime=problem.jobs[j[0]].averageProcessingTime
+            pastProcessingTimes=0
+            for i in solution.jobs[j[0]].operations:
+                if i.id<j[1]:
+                    pastProcessingTimes+=i.processingTime
+            remainingProcessingTime=totalProcessingTime-pastProcessingTimes
+            p=operationProcessingTime
+            P=totalProcessingTime
+            dd=dDate
+            r=rTime
+            SLK=dDate-currentTime-rTime
+            CR=(dDate-currentTime)/remainingProcessingTime
+            ODD=rTime+((dDate-rTime)*remainingProcessingTime)/totalProcessingTime
+            CRODD=(ODD-currentTime)/totalProcessingTime
+            a=eval(dRules[rid][1])
+            decisonList.append([mindex,a])
+        z= min(decisonList, key=lambda tup: tup[1])
+        index=z[0]
+    '''
     return result
 
 
