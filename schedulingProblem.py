@@ -20,6 +20,7 @@ class FJSSP:
             self.operations = list()
             self.releaseTime = 0
             self.dueDate=0
+            self.nOfOperations=0
 
     def __init__(self,nm, nj, c, fr):
         self.nj = nj#number of jobs
@@ -69,9 +70,12 @@ class FJSSP:
         for j in range(self.nj):
             job = self.job()#define job as class
             job.id=j# assign jobs id
-            numberOfOperations = self.nm#assign each job operations number
+            #numberOfOperations = self.nm#assign each job operations number
+            numberOfOperations = 1+np.random.randint(0,self.nm)
+            job.nOfOperations=numberOfOperations
             for o in range(numberOfOperations):
                 numberOfMachines = 1+np.random.randint(0,self.fr*self.nm)#assign each operation assignable machines number
+                #numberOfMachines = np.random.uniform(1, self.fr*self.nm+1)
                 operation = self.operation()#define operation as class
                 operation.id= o#assign operations id
                 machineSetPermutation = np.random.permutation(self.nm)[:numberOfMachines]#assign each operation assignable machines set

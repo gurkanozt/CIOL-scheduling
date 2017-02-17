@@ -1,4 +1,4 @@
-def dispatchingRules(k,solution,problem,mid,rid,currentTime):
+def dispatchingRules(k,solution,problem,mid,rid,currentTime,GRules):
     dRules=list()
     dRules.append([0,"FIFO"])
     dRules.append([1,"SPT"])
@@ -15,8 +15,7 @@ def dispatchingRules(k,solution,problem,mid,rid,currentTime):
     dRules.append([12,"(r+p+(2*P))"])
     dRules.append(([13,"((7*P)+(11*p)+12*(nOps+r))"]))
     result=list()
-    def FindOperationTime():
-        pass
+    '''
     if rid==0:
         result.append([k[0][0],k[0][1],mid])
     if rid==1:
@@ -92,36 +91,47 @@ def dispatchingRules(k,solution,problem,mid,rid,currentTime):
         z= min(decisonList, key=lambda tup: tup[1])
         index=z[0]
         result.append([k[index][0],k[index][1],mid])
-    if rid>5:
-        decisonList=list()
-        for mindex,j in enumerate(k):
-            dDate=problem.jobs[j[0]].dueDate
-            rTime=problem.jobs[j[0]].releaseTime
-            ntotalProcessingTime=problem.jobs[j[0]].averageProcessingTime
-            npastProcessingTimes=0
-            for index,m in enumerate(problem.jobs[j[0]].operations[j[1]].machineSet):
-                if m.id==mid:
-                    order=index
-            operationProcessingTime=problem.jobs[j[0]].operations[j[1]].processingTimes[order]
-            for i in solution.jobs[j[0]].operations:
-                if i.id<j[1]:
-                    npastProcessingTimes+=i.processingTime
-            remainingProcessingTime=ntotalProcessingTime-npastProcessingTimes
-            nOps=problem.nm
-            p=operationProcessingTime
-            P=ntotalProcessingTime
-            dd=dDate
-            r=rTime
-            Re=remainingProcessingTime
-            SLK=dDate-currentTime-rTime
-            CR=(dDate-currentTime)/remainingProcessingTime
-            ODD=rTime+((dDate-rTime)*remainingProcessingTime)/ntotalProcessingTime
-            CRODD=(ODD-currentTime)/ntotalProcessingTime
-            a=eval(dRules[rid][1])
-            decisonList.append([mindex,a])
-        z= min(decisonList, key=lambda tup: tup[1])
-        index=z[0]
-        result.append([k[index][0],k[index][1],mid])
+    '''
+
+    decisonList=list()
+    for mindex,j in enumerate(k):
+        dDate=problem.jobs[j[0]].dueDate
+        rTime=problem.jobs[j[0]].releaseTime
+        ntotalProcessingTime=problem.jobs[j[0]].averageProcessingTime
+        npastProcessingTimes=0
+        for index,m in enumerate(problem.jobs[j[0]].operations[j[1]].machineSet):
+            if m.id==mid:
+                order=index
+        operationProcessingTime=problem.jobs[j[0]].operations[j[1]].processingTimes[order]
+        for i in solution.jobs[j[0]].operations:
+            if i.id<j[1]:
+                npastProcessingTimes+=i.processingTime
+        remainingProcessingTime=ntotalProcessingTime-npastProcessingTimes
+        LnOps=problem.jobs[j[0]].nOfOperations
+        LRnOps=LnOps-j[1]
+        TWORK=ntotalProcessingTime
+        EDD=dDate
+        AT=rTime
+        LWKR=remainingProcessingTime
+        SLK=dDate-currentTime-rTime
+        CR=(dDate-currentTime)/remainingProcessingTime
+        ODD=rTime+((dDate-rTime)*remainingProcessingTime)/ntotalProcessingTime
+        CRODD=(ODD-currentTime)/ntotalProcessingTime
+        SPT=operationProcessingTime
+        SOP=(1-(SLK/LRnOps))/operationProcessingTime
+        if SLK>=0:
+            SOPN=SLK/LRnOps
+        else:
+            SOPN=SLK*LRnOps
+        COVERT=max(1-(max(SLK,0)/2*remainingProcessingTime),0)/operationProcessingTime
+        MODD=max(rTime +((dDate-rTime)*remainingProcessingTime)/ntotalProcessingTime,operationProcessingTime+currentTime)
+        OOD=rTime +((dDate-rTime)*remainingProcessingTime)/ntotalProcessingTime
+        #a=eval(dRules[rid][1])#it is worked main promram
+        a=eval(GRules[rid].fenotip[3][0])#it is worked with GA
+        decisonList.append([mindex,a])
+    z= min(decisonList, key=lambda tup: tup[1])
+    index=z[0]
+    result.append([k[index][0],k[index][1],mid])
     '''
     if rid==7:
         decisonList=list()

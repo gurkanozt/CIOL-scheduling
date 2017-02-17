@@ -84,7 +84,7 @@ class createSolution:
             self.solution.jobs[j[0]].operations[j[1]].oft=self.solution.jobs[j[0]].operations[j[1]].ost+self.problem.jobs[j[0]].operations[j[1]].processingTimes[order]
             self.solution.jobs[j[0]].finishTime=self.solution.jobs[j[0]].operations[j[1]].oft
             self.nextEventsSet.append([j[0],j[1],self.solution.jobs[j[0]].operations[j[1]].oft,mid])
-            if j[1]+1<self.problem.nm:
+            if j[1]+1<self.problem.jobs[j[0]].nOfOperations:
                 releaseTime=self.solution.jobs[j[0]].operations[j[1]].oft
                 self.solution.jobs[j[0]].operations[j[1]+1].oreleaseTime=releaseTime
                 self.nextEventsSet.append([j[0],j[1]+1,releaseTime,'r'])
@@ -163,7 +163,7 @@ class createSolution:
             #if len(lastStarted)<1:
             k = self.solution.machines[i[3]].mwlm
             if len(k)>0 :
-                result=DR.dispatchingRules(k,self.solution,self.problem,i[3],d,self.currentTime)
+                result=DR.dispatchingRules(k,self.solution,self.problem,i[3],d,self.currentTime,self.GeneticRules)
                 #result=GEP.GeneExtraction(k,self.solution,self.problem,i[3],d,self.currentTime,self.visitindex)
                 '''
                 result=list()
@@ -208,9 +208,9 @@ class createSolution:
     def simulatedSolution(self):
         nonDominated=list()
         Resultfile = open("result.txt","a")
-        #Result=[ [] for i in xrange(20)]#it is depend on number of dispatching rules. GA kullaniliyor
+        Result=[ [] for i in xrange(len(self.GeneticRules))]#it is depend on number of dispatching rules. GA kullaniliyor
         #Result[0].append(0)
-        for dRulesID in range(0,14):
+        for dRulesID in range(len(self.GeneticRules)):
             #for h in range(10):
             self.__init__(self.problem,self.solution,self.visitindex,self.GeneticRules)
             self.initialization()
@@ -257,7 +257,7 @@ class createSolution:
             Resultfile.write(str(mal[1][0])+ "\t")
             Resultfile.write(str(mal[1][1])+ "\n")
 
-            #Result[dRulesID]+=[dRulesID,mal[0],mal[1][0],mal[1][1]]
+            Result[dRulesID]+=[dRulesID,mal[0],mal[1][0],mal[1][1]]
 
             #nonDominated.append([mal[0],mal[1][0],mal[1][1]])
         #print d,mal[0],mal[1][0],mal[1][1]
@@ -265,7 +265,7 @@ class createSolution:
         #nDominated=NDS.sorting(nonDominated)
         Resultfile.close()
 
-        #return Result GA kullaniliyor
+        return Result #GA kullaniliyor
         #return self.solution
 
 
