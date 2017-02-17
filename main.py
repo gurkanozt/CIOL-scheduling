@@ -30,7 +30,7 @@ def Main(GeneticRules):
                     Result=cs1.simulatedSolution()
                     #a=TS.tranformation(pr1,ab)#call transformation function from TranformPermutationToSolution file
                     #print s1.order, "\n"#print solution
-                print timeit.default_timer()-start
+                #print timeit.default_timer()-start
 
     print Result
     print "oldu bu is"

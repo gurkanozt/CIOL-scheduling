@@ -250,13 +250,14 @@ class createSolution:
     '''
             #a=TS.tranformation(self.problem,self.solution)
             mal=EV.Evaluation(self.solution)
+            '''
             print "Dispatching Rule: ",dRulesID,"Cmax: ",mal[0],"MeanLateness: ",mal[1][0],"MeanFlowTime: ",mal[1][1]
 
             Resultfile.write(str(dRulesID)+ "\t")
             Resultfile.write(str(mal[0])+ "\t")
             Resultfile.write(str(mal[1][0])+ "\t")
             Resultfile.write(str(mal[1][1])+ "\n")
-
+'''
             Result[dRulesID]+=[dRulesID,mal[0],mal[1][0],mal[1][1]]
 
             #nonDominated.append([mal[0],mal[1][0],mal[1][1]])
