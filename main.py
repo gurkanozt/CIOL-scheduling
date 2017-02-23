@@ -11,13 +11,16 @@ import timeit
 def Main(GeneticRules):
 
     start = timeit.default_timer()
-    #GeneticRules=GeneticRules
-    flexible=[0.2,0.5,1]
-    dueDateParameter=[1.2,1.5,2,0]
+    #GeneticRules=[]
+    #flexible=[0.2,0.5,1]
+    flexible=[0.5]
+    #dueDateParameter=[1.2,1.5,2,0]
+    dueDateParameter=[1.2]
     #jobAndMachine=[[10,5],[20,5],[50,5],[20,10],[50,10],[100,10],[50,15],[100,15],[200,15]]
-    jobAndMachine=[[1000,10]]
+    jobAndMachine=[[20,10]]
 
-    for h in range(0,1):
+    data=[ [0,0,0,0] for i in xrange(len(GeneticRules))]
+    for h in range(0,10):
         for i in flexible:
             for j in dueDateParameter:
                 for index,k in enumerate(jobAndMachine):
@@ -28,12 +31,26 @@ def Main(GeneticRules):
                     #s2 = cs1.randomSolution(s1)
                     #cs1.initialization()
                     Result=cs1.simulatedSolution()
+
+                    for index,t in enumerate(data):
+                        for l in range(0,4):
+                            if l==0:
+                                data[index][l]=Result[index][l]
+                            else:
+                                data[index][l]+=Result[index][l]
+
                     #a=TS.tranformation(pr1,ab)#call transformation function from TranformPermutationToSolution file
                     #print s1.order, "\n"#print solution
                 #print timeit.default_timer()-start
+    for index,t in enumerate(data):#it is used for calculate mean value of objectives
+        for l in range(0,4):
+            if l==0:
+                data[index][l]=data[index][l]
+            else:
+                data[index][l]=data[index][l]/(len(flexible)*len(dueDateParameter)*len(jobAndMachine))
 
-    print Result
+    print data
     print "oldu bu is"
     stop = timeit.default_timer()
     print stop-start
-    return Result
+    return data

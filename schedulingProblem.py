@@ -70,8 +70,8 @@ class FJSSP:
         for j in range(self.nj):
             job = self.job()#define job as class
             job.id=j# assign jobs id
-            #numberOfOperations = self.nm#assign each job operations number
-            numberOfOperations = 1+np.random.randint(0,self.nm)
+            numberOfOperations = self.nm#assign each job operations number
+            #numberOfOperations = 1+np.random.randint(0,self.nm)
             job.nOfOperations=numberOfOperations
             for o in range(numberOfOperations):
                 numberOfMachines = 1+np.random.randint(0,self.fr*self.nm)#assign each operation assignable machines number

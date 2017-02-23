@@ -23,7 +23,7 @@ class GenetikAlgoritma(Birey):
             birey=Birey()
             birey.id=i
             headsize=10#parameter
-            birey.headsize=10
+            birey.headsize=headsize
             n=2#parameter
             tailsize=headsize*(n-1)+1
             dcsize=headsize
@@ -146,7 +146,7 @@ a=GenetikAlgoritma().CreateInitialPopulation()
 
 
 def mainGA(a):
-    ngeneration=50
+    ngeneration=30
     nDR=20
     rOfMutation=0.01
     rOfElitizm=0.10
@@ -163,12 +163,14 @@ def mainGA(a):
         vbn=Evaluate(result,a[0])
         bcb=GenetikOperations(a[0],a[1],a[2],rOfElitizm,rOfMutation,nDR)
         step.append(bcb)
+        '''
         for k in a[0]:
             Resultfile.write(str(k.id)+ "\t")
             Resultfile.write(str(k.Cmax)+ "\t")
             Resultfile.write(str(k.MeanTardiness)+ "\t")
             Resultfile.write(str(k.MeanFlowTime)+ "\t")
             Resultfile.write(str(k.FitnessValue)+ "\n")
+        '''
     for j in a[0]:
         #print j.Cmax,"\t",j.MeanTardiness,"\t",j.MeanFlowTime,"\t",j.FitnessValue
         Resultfile.write(str(j.id)+ "\t")
@@ -176,7 +178,7 @@ def mainGA(a):
 
     for i in step:
         print i
-    Resultfile.write(str(ngeneration)+"\t"+str(nDR)+"\t"+str(rOfElitizm)+"\t"+str(rOfMutation)+ "\n")
+    Resultfile.write(str(ngeneration)+"\t"+str(nDR)+"\t"+str(a[0][0].headsize)+"\t"+str(rOfElitizm)+"\t"+str(rOfMutation)+ "\n")
     stop = timeit.default_timer()
     print stop-start
     Resultfile.write(str(stop-start)+"\n")
@@ -217,9 +219,19 @@ def GenetikOperations(chromosome,fset,tset,rOfElitizm,rOfMutation,nDR):
         a=random.choice(Fitness)
         b=random.choice(Fitness)
         if a[1]<b[1]:
-            Temp.append(a)
+            x=1+random.randint(0,100)
+            if x<=70:
+                Temp.append(a)
+            else:
+                Temp.append(b)
         else:
-            Temp.append(b)
+            y=1+random.randint(0,100)
+            if y<=70:
+                Temp.append(b)
+            else:
+                Temp.append(a)
+
+
     for i in range(0,int((nDR*(1-rOfElitizm))/2)):#caprazlama
         ebeveyn1=random.choice(Temp)
         ebeveyn2=random.choice(Temp)

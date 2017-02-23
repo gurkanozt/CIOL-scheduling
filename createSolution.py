@@ -165,41 +165,6 @@ class createSolution:
             if len(k)>0 :
                 result=DR.dispatchingRules(k,self.solution,self.problem,i[3],d,self.currentTime,self.GeneticRules)
                 #result=GEP.GeneExtraction(k,self.solution,self.problem,i[3],d,self.currentTime,self.visitindex)
-                '''
-                result=list()
-                decisonList=list()
-                for mindex,j in  enumerate(k):
-                    dDate=self.problem.jobs[j[0]].dueDate
-                    rTime=self.problem.jobs[j[0]].releaseTime
-                    totalProcessingTime=self.problem.jobs[j[0]].averageProcessingTime
-                    pastProcessingTimes=0
-                    for index,m in enumerate(self.problem.jobs[j[0]].operations[j[1]].machineSet):
-                        if m.id==i[3]:
-                            order=index
-                    operationProcessingTime=self.problem.jobs[j[0]].operations[j[1]].processingTimes[order]
-                    for h in self.solution.jobs[j[0]].operations:
-                        if h.id<j[1]:
-                            pastProcessingTimes+=h.processingTime
-                    remainingProcessingTime=totalProcessingTime-pastProcessingTimes
-
-                    SLK=dDate-self.currentTime-rTime
-                    CR=(dDate-self.currentTime)/remainingProcessingTime
-                    ODD=rTime+((dDate-rTime)*remainingProcessingTime)/totalProcessingTime
-                    CRODD=(ODD-self.currentTime)/totalProcessingTime
-                    p=operationProcessingTime
-                    P=totalProcessingTime
-                    dd=dDate
-                    r=rTime
-                    Re=remainingProcessingTime
-                    GDR=self.GeneticRules[d].fenotip[3][0]
-                    #GDR=GeneticRules[rid]
-                    a=eval(GDR)
-                    decisonList.append([mindex,a])
-
-                z= min(decisonList, key=lambda tup: tup[1])
-                index=z[0]
-                result.append([k[index][0],k[index][1],i[3]])
-                '''
                 lastStarted.append(result[0])
 
 
@@ -209,8 +174,10 @@ class createSolution:
         nonDominated=list()
         Resultfile = open("result.txt","a")
         Result=[ [] for i in xrange(len(self.GeneticRules))]#it is depend on number of dispatching rules. GA kullaniliyor
+        #Result=[ [] for i in xrange(5)]
         #Result[0].append(0)
         for dRulesID in range(len(self.GeneticRules)):
+        #for dRulesID in range(5):
             #for h in range(10):
             self.__init__(self.problem,self.solution,self.visitindex,self.GeneticRules)
             self.initialization()
@@ -220,11 +187,6 @@ class createSolution:
             a=np.random.randint(0,lena)
 
             assignedMachineId=self.problem.jobs[z[0]].operations[z[1]].machineSet[a].id
-          #  self.solution.jobs[z[0]].operations[z[1]].machineId=assignedMachineId
-          #  self.solution.jobs[z[0]].operations[z[1]].machine.id=assignedMachineId
-          #  self.solution.jobs[z[0]].operations[z[1]].ost=self.nextTime
-          #  self.solution.jobs[z[0]].operations[z[1]].oft=self.solution.jobs[z[0]].operations[z[1]].ost+self.problem.jobs[z[0]].operations[z[1]].processingTimes[a]
-          #  self.solution.machines[assignedMachineId].assigment.appen([z[0],z[1]])
             self.assignment.append([z[0],z[1],assignedMachineId,'r'])
             self.solution.machines[assignedMachineId].assigmentOperation.append(z[:2])
             self.solution.machines[assignedMachineId].mwlm.append(z[:2])
@@ -252,14 +214,13 @@ class createSolution:
             mal=EV.Evaluation(self.solution)
             '''
             print "Dispatching Rule: ",dRulesID,"Cmax: ",mal[0],"MeanLateness: ",mal[1][0],"MeanFlowTime: ",mal[1][1]
-
+'''
             Resultfile.write(str(dRulesID)+ "\t")
             Resultfile.write(str(mal[0])+ "\t")
             Resultfile.write(str(mal[1][0])+ "\t")
             Resultfile.write(str(mal[1][1])+ "\n")
-'''
             Result[dRulesID]+=[dRulesID,mal[0],mal[1][0],mal[1][1]]
-
+            af=4
             #nonDominated.append([mal[0],mal[1][0],mal[1][1]])
         #print d,mal[0],mal[1][0],mal[1][1]
             #print nonDominated
