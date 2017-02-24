@@ -93,7 +93,7 @@ def dispatchingRules(k,solution,problem,mid,rid,currentTime,GRules):
         index=z[0]
         result.append([k[index][0],k[index][1],mid])
     ################################it is used for GA and DR
-
+'''
     decisonList=list()
     for mindex,j in enumerate(k):
         dDate=problem.jobs[j[0]].dueDate
@@ -129,14 +129,15 @@ def dispatchingRules(k,solution,problem,mid,rid,currentTime,GRules):
         MODD=max(rTime +((dDate-rTime)*remainingProcessingTime)/ntotalProcessingTime,operationProcessingTime+currentTime)
         OOD=rTime +((dDate-rTime)*remainingProcessingTime)/ntotalProcessingTime
 
-        a=eval(dRules[rid][1])#it is worked main promram
-        #a=eval(GRules[rid].fenotip[3][0])#it is worked with GA
+        #a=eval(dRules[rid][1])#it is worked main promram
+        a=eval(GRules[rid].fenotip[3][0])#it is worked with GA
         decisonList.append([mindex,a])
         z= min(decisonList, key=lambda tup: tup[1])
         index=z[0]
         result.append([k[index][0],k[index][1],mid])
-        '''
+
     ################## it is used for Dynamic rules
+    '''
     decisonList=list()
     tEDD=list()
     tr=list()
@@ -180,12 +181,12 @@ def dispatchingRules(k,solution,problem,mid,rid,currentTime,GRules):
         #SPT=operationProcessingTime
         #SOP=(1-(SLK/LRnOps))/operationProcessingTime
         #FIFO=mindex
-        '''
-        if SLK>=0:
-            SOPN=SLK/LRnOps
-        else:
-            SOPN=SLK*LRnOps
-        '''
+
+        #if SLK>=0:
+            #SOPN=SLK/LRnOps
+        #else:
+           # SOPN=SLK*LRnOps
+
         #COVERT=max(1-(max(SLK,0)/2*remainingProcessingTime),0)/operationProcessingTime
         tMODD.append(max(rTime +((dDate-rTime)*remainingProcessingTime)/ntotalProcessingTime,operationProcessingTime+currentTime))
         #OOD=rTime +((dDate-rTime)*remainingProcessingTime)/ntotalProcessingTime
@@ -275,7 +276,7 @@ def dispatchingRules(k,solution,problem,mid,rid,currentTime,GRules):
     z= min(decisonList, key=lambda tup: tup[1])
     index=z[0]
     result.append([k[index][0],k[index][1],mid])
-
+'''
     return result
 
 

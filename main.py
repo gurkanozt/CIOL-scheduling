@@ -20,7 +20,7 @@ def Main(GeneticRules):
     jobAndMachine=[[20,10]]
 
     data=[ [0,0,0,0] for i in xrange(len(GeneticRules))]
-    for h in range(0,10):
+    for h in range(0,1):
         for i in flexible:
             for j in dueDateParameter:
                 for index,k in enumerate(jobAndMachine):
