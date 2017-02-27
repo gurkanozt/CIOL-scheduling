@@ -22,7 +22,7 @@ class GenetikAlgoritma(Birey):
         for i in range(0,20):
             birey=Birey()
             birey.id=i
-            headsize=10#parameter
+            headsize=5#parameter
             birey.headsize=headsize
             n=2#parameter
             tailsize=headsize*(n-1)+1
@@ -146,43 +146,44 @@ a=GenetikAlgoritma().CreateInitialPopulation()
 
 
 def mainGA(a):
-    ngeneration=30
+    ngeneration=10
     nDR=20
     rOfMutation=0.01
     rOfElitizm=0.10
-    Resultfile = open("result.txt","a")
     '''
     for j in a:
         print j.Cmax,"\t",j.MeanTardiness,"\t",j.MeanFlowTime,"\t",j.FitnessValue
     '''
     step=list()
+    Resultfilez = open("sumofresult.txt","a")
     for i in range(0,ngeneration):
+        print str(i)+" .iterasyon"
         result=M.Main(a[0])
 
 
         vbn=Evaluate(result,a[0])
         bcb=GenetikOperations(a[0],a[1],a[2],rOfElitizm,rOfMutation,nDR)
         step.append(bcb)
-        '''
+
         for k in a[0]:
-            Resultfile.write(str(k.id)+ "\t")
-            Resultfile.write(str(k.Cmax)+ "\t")
-            Resultfile.write(str(k.MeanTardiness)+ "\t")
-            Resultfile.write(str(k.MeanFlowTime)+ "\t")
-            Resultfile.write(str(k.FitnessValue)+ "\n")
-        '''
+            Resultfilez.write(str(k.id)+ "\t")
+            Resultfilez.write(str(k.Cmax)+ "\t")
+            Resultfilez.write(str(k.MeanTardiness)+ "\t")
+            Resultfilez.write(str(k.MeanFlowTime)+ "\t")
+            Resultfilez.write(str(k.FitnessValue)+ "\n")
+
     for j in a[0]:
         #print j.Cmax,"\t",j.MeanTardiness,"\t",j.MeanFlowTime,"\t",j.FitnessValue
-        Resultfile.write(str(j.id)+ "\t")
-        Resultfile.write(str(j.fenotip[3][0])+ "\n")
+        Resultfilez.write(str(j.id)+ "\t")
+        Resultfilez.write(str(j.fenotip[3][0])+ "\n")
 
     for i in step:
         print i
-    Resultfile.write(str(ngeneration)+"\t"+str(nDR)+"\t"+str(a[0][0].headsize)+"\t"+str(rOfElitizm)+"\t"+str(rOfMutation)+ "\n")
+    Resultfilez.write(str(ngeneration)+"\t"+str(nDR)+"\t"+str(a[0][0].headsize)+"\t"+str(rOfElitizm)+"\t"+str(rOfMutation)+ "\n")
     stop = timeit.default_timer()
     print stop-start
-    Resultfile.write(str(stop-start)+"\n")
-    Resultfile.close()
+    Resultfilez.write(str(stop-start)+"\n")
+    Resultfilez.close()
 def Evaluate(result,chromosome):
 
     #DrRules=[0 for i in xrange(len(result))]

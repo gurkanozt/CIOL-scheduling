@@ -174,10 +174,10 @@ class createSolution:
         nonDominated=list()
         Resultfile = open("result.txt","a")
         Result=[ [] for i in xrange(len(self.GeneticRules))]#it is depend on number of dispatching rules. GA kullaniliyor
-        #Result=[ [] for i in xrange(5)]
+        #Result=[ [] for i in xrange(14)]
         #Result[0].append(0)
         for dRulesID in range(len(self.GeneticRules)):
-        #for dRulesID in range(5):
+        #for dRulesID in range(14):
             #for h in range(10):
             self.__init__(self.problem,self.solution,self.visitindex,self.GeneticRules)
             self.initialization()
@@ -212,14 +212,14 @@ class createSolution:
     '''
             #a=TS.tranformation(self.problem,self.solution)
             mal=EV.Evaluation(self.solution)
-            '''
-            print "Dispatching Rule: ",dRulesID,"Cmax: ",mal[0],"MeanLateness: ",mal[1][0],"MeanFlowTime: ",mal[1][1]
-'''
+
+
             Resultfile.write(str(dRulesID)+ "\t")
             Resultfile.write(str(mal[0])+ "\t")
             Resultfile.write(str(mal[1][0])+ "\t")
             Resultfile.write(str(mal[1][1])+ "\n")
-            Result[dRulesID]+=[dRulesID,mal[0],mal[1][0],mal[1][1]]
+
+            Result[dRulesID]+=[dRulesID,mal[0],mal[1][0],mal[1][1]] #GA kullanilir
             af=4
             #nonDominated.append([mal[0],mal[1][0],mal[1][1]])
         #print d,mal[0],mal[1][0],mal[1][1]

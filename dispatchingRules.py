@@ -4,17 +4,17 @@ def dispatchingRules(k,solution,problem,mid,rid,currentTime,GRules):
     dRules.append([0,"FIFO"])
     dRules.append([1,"SPT"])
     dRules.append([2,"EDD"])
-    dRules.append([3,"MODD"])
+    dRules.append([3,"(((SLK/((SLK/(SOPN+0.000000001))+0.000000001))+(LWKR-LWKR))*(SPT*(CR/(4+0.000000001))))"])
     dRules.append([4,"SPT+LWKR+SLK"])
-    dRules.append([5,"ODD"])
-    dRules.append([6,"(((CR/((ODD*3)+0.000000001))*CRODD)+ODD)"])
-    dRules.append([7,"(ODD+(((CRODD-Re)+Re)+1))"])
-    dRules.append([8,"(ODD+Re)"])
-    dRules.append([9,"(P*Re)"])
-    dRules.append([10,"((ODD-(CRODD*(CRODD*CRODD)))*Re)"])
-    dRules.append([11,"((dd-(CRODD*(CRODD*CRODD)))*Re)"])
-    dRules.append([12,"(r+p+(2*P))"])
-    dRules.append(([13,"((7*P)+(11*p)+12*(nOps+r))"]))
+    dRules.append([5,"(((SLK/((SLK/(SOPN+0.000000001))+0.000000001))+(LWKR-LWKR))*(LnOps*(TWORK*4)))"])
+    dRules.append([6,"(SOP-((CR/(ODD+0.000000001))-(EDD+COVERT)))"])
+    dRules.append([7,"(ODD+(((CRODD-LWKR)+LWKR)+1))"])
+    dRules.append([8,"(ODD+LWKR)"])
+    dRules.append([9,"(TWORK*LWKR)"])
+    dRules.append([10,"((ODD-(CRODD*(CRODD*CRODD)))*LWKR)"])
+    dRules.append([11,"((EDD-(CRODD*(CRODD*CRODD)))*LWKR)"])
+    dRules.append([12,"(rTime+SPT+(2*TWORK))"])
+    dRules.append(([13,"((7*TWORK)+(11*SPT)+12*(LnOps+rTime))"]))
     result=list()
     '''
     if rid==0:
@@ -132,9 +132,9 @@ def dispatchingRules(k,solution,problem,mid,rid,currentTime,GRules):
         #a=eval(dRules[rid][1])#it is worked main promram
         a=eval(GRules[rid].fenotip[3][0])#it is worked with GA
         decisonList.append([mindex,a])
-        z= min(decisonList, key=lambda tup: tup[1])
-        index=z[0]
-        result.append([k[index][0],k[index][1],mid])
+    z= min(decisonList, key=lambda tup: tup[1])
+    index=z[0]
+    result.append([k[index][0],k[index][1],mid])
 
     ################## it is used for Dynamic rules
     '''
