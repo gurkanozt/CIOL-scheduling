@@ -19,7 +19,7 @@ class GenetikAlgoritma(Birey):
 
     def CreateInitialPopulation(self):
 
-        for i in range(0,20):
+        for i in range(0,2):
             birey=Birey()
             birey.id=i
             headsize=5#parameter
@@ -146,8 +146,8 @@ a=GenetikAlgoritma().CreateInitialPopulation()
 
 
 def mainGA(a):
-    ngeneration=10
-    nDR=20
+    ngeneration=3
+    nDR=2
     rOfMutation=0.01
     rOfElitizm=0.10
     '''

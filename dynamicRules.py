@@ -15,7 +15,7 @@ class Birey:
 class DynamicRules(Birey):
     def __init__(self):
         self.chromosome=list()
-        self.numberOfrules=20
+        self.numberOfrules=40
     def CreateInitialPopulation(self):
 
         for i in range(0,self.numberOfrules):
@@ -51,35 +51,35 @@ a=DynamicRules().CreateInitialPopulation()
 abss=11
 
 def mainGA(a):
-    ngeneration=20
-    nDR=20
+    ngeneration=40
+    nDR=40
     rOfElitizm=0.10
     rOfMutation=0.002
-    Resultfile = open("result.txt","a")
+    Resultfilez = open("sumofresult.txt","a")
     for i in range(0,ngeneration):
         result=M.Main(a)
-
+        print str(i)+" .iterasyon"
 
         Evaluate(result,a)
         GenetikOperations(a,rOfElitizm,rOfMutation,nDR)
-        '''
-        for k in a[0]:
-            Resultfile.write(str(k.id)+ "\t")
-            Resultfile.write(str(k.Cmax)+ "\t")
-            Resultfile.write(str(k.MeanTardiness)+ "\t")
-            Resultfile.write(str(k.MeanFlowTime)+ "\t")
-            Resultfile.write(str(k.FitnessValue)+ "\n")
-        '''
+
+        for k in a:
+            Resultfilez.write(str(k.id)+ "\t")
+            Resultfilez.write(str(k.Cmax)+ "\t")
+            Resultfilez.write(str(k.MeanTardiness)+ "\t")
+            Resultfilez.write(str(k.MeanFlowTime)+ "\t")
+            Resultfilez.write(str(k.FitnessValue)+ "\n")
+
     for j in a:
         #print j.Cmax,"\t",j.MeanTardiness,"\t",j.MeanFlowTime,"\t",j.FitnessValue
-        Resultfile.write(str(j.id)+ "\t")
-        Resultfile.write(str(j.genotip)+ "\n")
+        Resultfilez.write(str(j.id)+ "\t")
+        Resultfilez.write(str(j.genotip)+ "\n")
 
-    Resultfile.write(str(ngeneration)+"\t"+str(nDR)+"\t"+str(rOfElitizm)+"\t"+str(rOfMutation)+ "\n")
+    Resultfilez.write(str(ngeneration)+"\t"+str(nDR)+"\t"+str(rOfElitizm)+"\t"+str(rOfMutation)+ "\n")
     stop = timeit.default_timer()
     print stop-start
-    Resultfile.write(str(stop-start)+"\n")
-    Resultfile.close()
+    Resultfilez.write(str(stop-start)+"\n")
+    Resultfilez.close()
 def Evaluate(result,chromosome):
 
     #DrRules=[0 for i in xrange(len(result))]

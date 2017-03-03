@@ -1,9 +1,8 @@
 import numpy as np
-import dispatchingRules as DR
+import jobSelection as JS
 import TransformPermutaionToSolution as TS
 import evaluation as EV
 import nonDominatedSorting as NDS
-import geneExpression as GEP
 class createSolution:
 
     def __init__(self, problem,solution,visitindex,GR):
@@ -163,7 +162,7 @@ class createSolution:
             #if len(lastStarted)<1:
             k = self.solution.machines[i[3]].mwlm
             if len(k)>0 :
-                result=DR.dispatchingRules(k,self.solution,self.problem,i[3],d,self.currentTime,self.GeneticRules)
+                result=JS.dispatchingRules(k,self.solution,self.problem,i[3],d,self.currentTime,self.GeneticRules)
                 #result=GEP.GeneExtraction(k,self.solution,self.problem,i[3],d,self.currentTime,self.visitindex)
                 lastStarted.append(result[0])
 

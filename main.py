@@ -15,9 +15,9 @@ def Main(GeneticRules):
     flexible=[0.2,0.5,1]
     dueDateParameter=[1.2,1.5,2,0]
     jobAndMachine=[[10,5],[20,5],[50,5],[20,10],[50,10],[100,10],[50,15],[100,15],[200,15]]
-
     data=[ [0,0,0,0] for i in xrange(len(GeneticRules))]
-    for h in range(0,1):
+    repetition=10
+    for h in range(0,repetition):
         for i in flexible:
             for j in dueDateParameter:
                 for index,k in enumerate(jobAndMachine):
@@ -45,7 +45,7 @@ def Main(GeneticRules):
             if l==0:
                 data[index][l]=data[index][l]
             else:
-                data[index][l]=data[index][l]/(len(flexible)*len(dueDateParameter)*len(jobAndMachine))
+                data[index][l]=data[index][l]/(len(flexible)*len(dueDateParameter)*len(jobAndMachine)*repetition)
 
     #print data
     print "oldu bu is"
