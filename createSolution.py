@@ -209,7 +209,7 @@ class createSolution:
                     if i[2]==self.currentTime and i[3]=='r':
                         self.nextEventsSet.remove(i)
     '''
-            #a=TS.tranformation(self.problem,self.solution)
+            #a=TS.tranformation(self.problem,self.solution)#used for draw gantt chart
             mal=EV.Evaluation(self.solution)
 
 

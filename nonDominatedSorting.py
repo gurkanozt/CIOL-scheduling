@@ -40,6 +40,7 @@ def sorting(nonDominated):
     marker=list()
     color=list()
     size=list()
+    '''
     for i in range(len(nonDominated)):
         if i<len(nonDominated)/3:
             marker.append('o')
@@ -54,6 +55,11 @@ def sorting(nonDominated):
             marker.append('2')
             color.append('blue')
             size.append(100)
+    '''
+    for i in range(len(nonDominated)):
+        marker.append('o')
+        color.append('red')
+        size.append(50)
 
     for index,n in enumerate(nonDominated):
         sequence_containing_x_vals.append(n[0])
@@ -68,6 +74,6 @@ def sorting(nonDominated):
     ax.set_ylabel('Mean Lateness')
     ax.set_zlabel('Mean Flow Time')
 
-    #plt.show()
+    plt.show()
 
 

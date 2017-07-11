@@ -96,7 +96,7 @@ def dispatchingRules(k,solution,problem,mid,rid,currentTime,GRules):
     ################################it is used for GA and DR
 '''
 
-    if rid<46:
+    if rid>46:
         decisonList=list()
         for mindex,j in enumerate(k):
             dDate=problem.jobs[j[0]].dueDate
@@ -242,10 +242,12 @@ def dispatchingRules(k,solution,problem,mid,rid,currentTime,GRules):
             MODD=(xMODD-minMODD)/(maxMODD-minMODD+0.00000001)
             SLK=(xSLK-minSLK)/(maxSLK-minSLK+0.00000001)
             Re=(xRe-minRe)/(maxRe-minRe+0.00000001)
-            #b=GRules[rid].genotip #it is used for extracing dynamic rules
-            b= GRules[rid][1]
+            b=GRules[rid].genotip #it is used for extracing dynamic rules
+            functionOfRule=GRules[rid].function
+            #b= GRules[rid][1]#it is used for analysis of rules
             formule=""
-            for i in b:
+            first=False
+            for index,i in enumerate(b):
                 x=eval(i[0])
                 if i[1]!=-1:
                     up=True
@@ -259,15 +261,32 @@ def dispatchingRules(k,solution,problem,mid,rid,currentTime,GRules):
                 downlimit=i[3]
                 if up==True and down==True:
                     if downlimit<= x <=uplimit:
-                        formule+=i[0]+"+"
+                        #formule+=i[0]+"+"
+                        if index!=0 and first==True:
+                            formule+=functionOfRule[index-1]+i[0]
+                        else:
+                            formule+=i[0]
+                        first=True
                 elif up==True and down==False:
                     if x<= uplimit:
-                        formule+=i[0]+"+"
+                        if index!=0 and first==True:
+                            formule+=functionOfRule[index-1]+i[0]
+                        else:
+                            formule+=i[0]
+                        first=True
                 elif up==False and down==True:
                     if x>=downlimit:
-                        formule+=i[0]+"+"
+                        if index!=0 and first==True:
+                            formule+=functionOfRule[index-1]+i[0]
+                        else:
+                            formule+=i[0]
+                        first=True
                 else:
-                    formule+=i[0]+"+"
+                    if index!=0 and first==True:
+                        formule+=functionOfRule[index-1]+i[0]
+                    else:
+                        formule+=i[0]
+                    first=True
 
             DD=dDate
             p=operationProcessingTime
@@ -282,7 +301,7 @@ def dispatchingRules(k,solution,problem,mid,rid,currentTime,GRules):
             if len(formule)<1:
                 a=1000000000
             else:
-                formule=formule[:-1]
+                #formule=formule[:-1]
                 a=eval(formule)
             #a=eval(GRules[rid].genotip)#it is worked with GA
             decisonList.append([mindex,a])

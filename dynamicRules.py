@@ -12,6 +12,7 @@ class Birey:
         self.MeanFlowTime=0.0
         self.FitnessValue=0.0
         self.len=0
+        self.function=list()#used for nonlineer
 class DynamicRules(Birey):
     def __init__(self):
         self.chromosome=list()
@@ -22,9 +23,11 @@ class DynamicRules(Birey):
             birey=Birey()
             birey.id=i
             terminalset=["p","P","DD","SLK","ODD","MODD","CR","CRODD","r","Re"]
+            functionset=["+","-","*","/"]#used for nonlineer dynamic rules extracting
             chromosomelen=5*len(terminalset)#parameter
             birey.len=chromosomelen
             tempchromosome=list()
+            tempfunction=list()
 
             count=0
             for j  in range (0,len(terminalset)):
@@ -42,7 +45,11 @@ class DynamicRules(Birey):
                     head.append(a)
                 tempchromosome.append(head)
                 count+=1
+            for j in range(len(terminalset)-1):
+                tempfunction.append(random.choice(functionset))
+
             birey.genotip=(tempchromosome)
+            birey.function=tempfunction
             #birey.genotip=(sum(tempchromosome,[]))
             self.chromosome.append(birey)
         return self.chromosome
@@ -51,7 +58,7 @@ a=DynamicRules().CreateInitialPopulation()
 abss=11
 
 def mainGA(a):
-    ngeneration=40
+    ngeneration=20
     nDR=40
     rOfElitizm=0.10
     rOfMutation=0.002
@@ -74,6 +81,7 @@ def mainGA(a):
         #print j.Cmax,"\t",j.MeanTardiness,"\t",j.MeanFlowTime,"\t",j.FitnessValue
         Resultfilez.write(str(j.id)+ "\t")
         Resultfilez.write(str(j.genotip)+ "\n")
+        Resultfilez.write(str(j.function)+ "\n")
 
     Resultfilez.write(str(ngeneration)+"\t"+str(nDR)+"\t"+str(rOfElitizm)+"\t"+str(rOfMutation)+ "\n")
     stop = timeit.default_timer()
@@ -101,6 +109,7 @@ def GenetikOperations(chromosome,rOfElitizm,rOfMutation,nDR):
     Fitness=list()
     Temp=list()
     tlist=list()
+    tfunctionlist=list()
     for i in chromosome:
         Fitness.append([i.id,i.FitnessValue])
     #print Fitness
@@ -111,6 +120,8 @@ def GenetikOperations(chromosome,rOfElitizm,rOfMutation,nDR):
         x=SortedFitness[i][0]
         #Temp.append(SortedFitness[i])
         tlist.append(chromosome[x].genotip)
+        tfunctionlist.append(chromosome[x].function)
+
 
     for i in range(0,int(nDR*(1-rOfElitizm))):
         a=random.choice(Fitness)
@@ -140,6 +151,8 @@ def GenetikOperations(chromosome,rOfElitizm,rOfMutation,nDR):
         child2=genob[:r+1]+genoa[r+1:]
         tlist.append(child1)
         tlist.append(child2)
+        tfunctionlist.append(chromosome[ebeveyn1[0]].function)
+        tfunctionlist.append(chromosome[ebeveyn1[0]].function)
 
     for i in tlist:#Mutasyon
         for j in i:
@@ -160,5 +173,7 @@ def GenetikOperations(chromosome,rOfElitizm,rOfMutation,nDR):
     for index,j in enumerate(tlist):
         chromosome[index].genotip=j
         chromosome[index].id=index
+        chromosome[index].function=tfunctionlist[index]
+
 
 vvv=mainGA(a)

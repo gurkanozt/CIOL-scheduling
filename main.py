@@ -12,11 +12,18 @@ def Main(GeneticRules):
 
     start = timeit.default_timer()
     #GeneticRules=[]
+
     flexible=[0.2,0.5,1]
     dueDateParameter=[1.2,1.5,2,0]
     jobAndMachine=[[10,5],[20,5],[50,5],[20,10],[50,10],[100,10],[50,15],[100,15],[200,15]]
+    '''
+    flexible=[0.5]
+    dueDateParameter=[1.5]
+    jobAndMachine=[[10,3]]
+    '''
     data=[ [0,0,0,0] for i in xrange(len(GeneticRules))]
-    repetition=30
+
+    repetition=1
     for h in range(0,repetition):
         for i in flexible:
             for j in dueDateParameter:
