@@ -96,7 +96,7 @@ def dispatchingRules(k,solution,problem,mid,rid,currentTime,GRules):
     ################################it is used for GA and DR
 '''
 
-    if rid>46:
+    if rid>100:
         decisonList=list()
         for mindex,j in enumerate(k):
             dDate=problem.jobs[j[0]].dueDate
@@ -139,7 +139,7 @@ def dispatchingRules(k,solution,problem,mid,rid,currentTime,GRules):
         result.append([k[index][0],k[index][1],mid])
 
     ################## it is used for Dynamic rules
-    else:
+    elif rid< -1 :
         decisonList=list()
         tEDD=list()
         tr=list()
@@ -304,6 +304,66 @@ def dispatchingRules(k,solution,problem,mid,rid,currentTime,GRules):
                 #formule=formule[:-1]
                 a=eval(formule)
             #a=eval(GRules[rid].genotip)#it is worked with GA
+            decisonList.append([mindex,a])
+        z= min(decisonList, key=lambda tup: tup[1])
+        index=z[0]
+        result.append([k[index][0],k[index][1],mid])
+    else:
+        decisonList=list()
+        for mindex,j in enumerate(k):
+            dDate=problem.jobs[j[0]].dueDate
+            rTime=problem.jobs[j[0]].releaseTime
+            #ntotalProcessingTime=problem.jobs[j[0]].averageProcessingTime
+            npastProcessingTimes=0
+            for index,m in enumerate(problem.jobs[j[0]].operations[j[1]].machineSet):
+                if m.id==mid:
+                    order=index
+            operationProcessingTime=problem.jobs[j[0]].operations[j[1]].processingTimes[order]
+            for i in solution.jobs[j[0]].operations:
+                if i.id<j[1]:
+                    npastProcessingTimes+=i.processingTime
+            #remainingProcessingTime=ntotalProcessingTime-npastProcessingTimes
+            #LnOps=problem.jobs[j[0]].nOfOperations
+            #LRnOps=LnOps-j[1]
+            #TWORK=ntotalProcessingTime
+            EDD=dDate
+            #AT=rTime
+            #LWKR=remainingProcessingTime
+            SLK=dDate-currentTime-rTime
+            #CR=(dDate-currentTime)/remainingProcessingTime
+            #ODD=rTime+((dDate-rTime)*remainingProcessingTime)/ntotalProcessingTime
+            #CRODD=(ODD-currentTime)/ntotalProcessingTime
+            SPT=operationProcessingTime
+            #SOP=(1-(SLK/LRnOps))/operationProcessingTime
+            FIFO=mindex
+            '''
+            if SLK>=0:
+                SOPN=SLK/LRnOps
+            else:
+                SOPN=SLK*LRnOps
+            '''
+            #COVERT=max(1-(max(SLK,0)/2*remainingProcessingTime),0)/operationProcessingTime
+            #MODD=max(rTime +((dDate-rTime)*remainingProcessingTime)/ntotalProcessingTime,operationProcessingTime+currentTime)
+            #OOD=rTime +((dDate-rTime)*remainingProcessingTime)/ntotalProcessingTime
+            rules=GRules[rid].rulesSet
+            ql=GRules[rid].qlSet
+            numberOfWaitingOperation=len(solution.machines[mid].mwlm)
+            cumsum=0
+            count=-1
+            p=True
+            #glList=list()
+            for i in ql:
+                cumsum+=i
+                count+=1
+                if numberOfWaitingOperation<=cumsum:
+                    p=False
+                    break
+            if p == True :
+                count+=1
+            #glList.append(cumsum)
+            #a=eval(GRules[rid][1])
+            #a=eval(GRules[rid].fenotip[3][0])#it is worked with GA
+            a=eval(rules[count])
             decisonList.append([mindex,a])
         z= min(decisonList, key=lambda tup: tup[1])
         index=z[0]
