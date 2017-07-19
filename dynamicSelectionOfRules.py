@@ -17,7 +17,7 @@ class Birey:
 class DynamicRules(Birey):
     def __init__(self):
         self.chromosome=list()
-        self.numberOfrules=30
+        self.numberOfrules=40
         self.tr=3
     def CreateInitialPopulation(self):
 
@@ -49,8 +49,8 @@ a=DynamicRules().CreateInitialPopulation()
 abss=11
 
 def mainGA(a):
-    ngeneration=100
-    nDR=30
+    ngeneration=50
+    nDR=40
     rOfElitizm=0.10
     rOfMutation=0.002
     Resultfilez = open("sumofresult.txt","a")
