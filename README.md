@@ -5,4 +5,4 @@ In this repository, it is focused on extracting priority rules (PR) for dynamic 
 This project was developed using Python2.
 I highly recommend using Anaconda for Python environment management. It will help you install Shapely, which I've had some problems installing with pip. You do not need extra libraries not contained by Anaconda. 
 ## Extracting new PR's using GEP
-When you run the ```genetikAlgoritma.py``` new rules automatically are generated according to given parameters. This script calls the ```main.py``` containing both ```schedulingProblem.py``` generating the problem and ``` schedulingProblem.py``` that is the simulation scripts.
+When you run the ```genetikAlgoritma.py``` new rules automatically are generated according to given parameters. This script calls the ```main.py``` containing both ```schedulingProblem.py``` generating the problem and ``` createSolution.py``` that is the simulation scripts.
