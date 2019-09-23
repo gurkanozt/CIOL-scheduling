@@ -97,7 +97,7 @@ dRules.append(([45,"(COVERT+LWKR)"]))
 
 
 Resultfilez = open("sumofresult.txt","a")
-result=M.Main(dRules)
+result=M.Main(dRules,0)
 absd=11
 #nonDominated.append([result[1],result[2],result[3]])
         #print d,mal[0],mal[1][0],mal[1][1]

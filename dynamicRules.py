@@ -65,7 +65,7 @@ def mainGA(a):
     rOfMutation=0.002
     Resultfilez = open("sumofresult.txt","a")
     for i in range(0,ngeneration):
-        result=M.Main(a)
+        result=M.Main(a,extracting=1)
         print str(i)+" .iterasyon"
 
         Evaluate(result,a)

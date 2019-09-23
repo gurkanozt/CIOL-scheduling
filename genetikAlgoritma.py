@@ -18,7 +18,6 @@ class GenetikAlgoritma(Birey):
         self.chromosome=list()
 
     def CreateInitialPopulation(self):
-
         for i in range(0,2):
             birey=Birey()
             birey.id=i
@@ -146,8 +145,8 @@ a=GenetikAlgoritma().CreateInitialPopulation()
 
 
 def mainGA(a):
-    ngeneration=3
-    nDR=2
+    ngeneration=500
+    nDR=50
     rOfMutation=0.01
     rOfElitizm=0.10
     '''
@@ -158,7 +157,7 @@ def mainGA(a):
     Resultfilez = open("sumofresult.txt","a")
     for i in range(0,ngeneration):
         print str(i)+" .iterasyon"
-        result=M.Main(a[0])
+        result=M.Main(a[0],extracting=2)
 
 
         vbn=Evaluate(result,a[0])

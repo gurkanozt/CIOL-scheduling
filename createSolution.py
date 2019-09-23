@@ -5,7 +5,7 @@ import evaluation as EV
 import nonDominatedSorting as NDS
 class createSolution:
 
-    def __init__(self, problem,solution,visitindex,GR):
+    def __init__(self, problem,solution,visitindex,GR,extraction):
         self.notReleasedOpSet = list()
         self.releasedOpSet = list()
         self.notFinishedOpSet = list()
@@ -22,6 +22,7 @@ class createSolution:
         self.lastAssigned=list()
         self.visitindex=visitindex
         self.GeneticRules=GR
+        self.extraction=extraction
 
 
     def initialization(self):
@@ -162,7 +163,7 @@ class createSolution:
             #if len(lastStarted)<1:
             k = self.solution.machines[i[3]].mwlm
             if len(k)>0 :
-                result=JS.dispatchingRules(k,self.solution,self.problem,i[3],d,self.currentTime,self.GeneticRules)
+                result=JS.dispatchingRules(k,self.solution,self.problem,i[3],d,self.currentTime,self.GeneticRules,self.extraction)
                 #result=GEP.GeneExtraction(k,self.solution,self.problem,i[3],d,self.currentTime,self.visitindex)
                 lastStarted.append(result[0])
 
@@ -178,7 +179,7 @@ class createSolution:
         for dRulesID in range(len(self.GeneticRules)):
         #for dRulesID in range(14):
             #for h in range(10):
-            self.__init__(self.problem,self.solution,self.visitindex,self.GeneticRules)
+            self.__init__(self.problem,self.solution,self.visitindex,self.GeneticRules,self.extraction)
             self.initialization()
             self.nextTime=self.currentTime
             z= min(self.nextEventsSet, key=lambda tup: tup[2])#job in Evenset assigned to machines randomly

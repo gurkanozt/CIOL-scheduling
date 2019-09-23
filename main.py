@@ -8,7 +8,7 @@ import timeit
 
 #Your statements here
 
-def Main(GeneticRules):
+def Main(GeneticRules,extracting=0):
 
     start = timeit.default_timer()
     #GeneticRules=[]
@@ -31,7 +31,7 @@ def Main(GeneticRules):
                     pr1 = SP.FJSSP(k[1], k[0], j, i)#generate problem
                     #pr1.printTable()#call print function from schedulingProblem file
                     s1 = SS.Solution(pr1)#call solution function from solution file
-                    cs1 = CS.createSolution(pr1,s1,index,GeneticRules)
+                    cs1 = CS.createSolution(pr1,s1,index,GeneticRules,extracting)
                     #s2 = cs1.randomSolution(s1)
                     #cs1.initialization()
                     Result=cs1.simulatedSolution()

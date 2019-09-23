@@ -1,5 +1,5 @@
 import random
-def dispatchingRules(k,solution,problem,mid,rid,currentTime,GRules):
+def dispatchingRules(k,solution,problem,mid,rid,currentTime,GRules,extraction):
     result=list()
     '''
     result=list()
@@ -96,7 +96,7 @@ def dispatchingRules(k,solution,problem,mid,rid,currentTime,GRules):
     ################################it is used for GA and DR
 '''
 
-    if rid>100:
+    if extraction !=1:
         decisonList=list()
         for mindex,j in enumerate(k):
             dDate=problem.jobs[j[0]].dueDate
@@ -131,15 +131,17 @@ def dispatchingRules(k,solution,problem,mid,rid,currentTime,GRules):
             COVERT=max(1-(max(SLK,0)/2*remainingProcessingTime),0)/operationProcessingTime
             MODD=max(rTime +((dDate-rTime)*remainingProcessingTime)/ntotalProcessingTime,operationProcessingTime+currentTime)
             OOD=rTime +((dDate-rTime)*remainingProcessingTime)/ntotalProcessingTime
-            a=eval(GRules[rid][1])
-            #a=eval(GRules[rid].fenotip[3][0])#it is worked with GA
+            if extraction==0:
+                a=eval(GRules[rid][1])
+            else:
+                a=eval(GRules[rid].fenotip[3][0])#it is worked with GA
             decisonList.append([mindex,a])
         z= min(decisonList, key=lambda tup: tup[1])
         index=z[0]
         result.append([k[index][0],k[index][1],mid])
 
     ################## it is used for Dynamic rules
-    elif rid< -1 :
+    elif extraction==1 or extraction==1.5:
         decisonList=list()
         tEDD=list()
         tr=list()
@@ -242,7 +244,10 @@ def dispatchingRules(k,solution,problem,mid,rid,currentTime,GRules):
             MODD=(xMODD-minMODD)/(maxMODD-minMODD+0.00000001)
             SLK=(xSLK-minSLK)/(maxSLK-minSLK+0.00000001)
             Re=(xRe-minRe)/(maxRe-minRe+0.00000001)
-            b=GRules[rid].genotip #it is used for extracing dynamic rules
+            if b==1:
+                b=GRules[rid].genotip #it is used for extracing dynamic rules
+            if b==1.5:
+                b = GRules[rid][1]  # it is used for analysis of rules
             functionOfRule=GRules[rid].function
             #b= GRules[rid][1]#it is used for analysis of rules
             formule=""
