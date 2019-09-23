@@ -7,7 +7,7 @@ I highly recommend using Anaconda for Python environment management. It will hel
 ## Extracting new PR's using GEP
 When you run the ```genetikAlgoritma.py``` new rules automatically are generated according to given parameters. This script calls the ```main.py``` containing both ```schedulingProblem.py``` generating the problem and ``` createSolution.py``` that is the simulation scripts. After have finished, the scripts ```sumofresult.txt``` file is created. This file contains all information about GEP steps and at the bottom of this file, you can find the extracted PR's. 
 ## Testing PR's
-If you have your PR's you can test them by running ```dispatchingRules.py``` script. Before running this script you should add your rules on this file. You must select your variables created your rules in our GEP terminal sets(you can find it in the paper page 8).  
+If you have your PR's you can test them by running ```dispatchingRules.py``` script. Before running this script you should add your rules on this file. You must select your variables created your rules in our GEP terminal sets (you can find it in the paper page 8).  
 When you run the script, ```main.py``` is called same as Extracting new PR's using GEP. After finish the script ```result.txt```and  ```sumofresult.txt``` files are created. The first file records all result for all PR's for each subproblem while the second file gives brief information.
 ## Extracting dynamic rules 
 If you want to extract dynamic rules, you must run the ```dynamicSelectionOfRules.py```. You can also access the related paper from this [link](http://www.hrpub.org/download/20180330/UJIBM2-11611325.pdf).
