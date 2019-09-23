@@ -11,3 +11,5 @@ If you have your PR's you can test them by running ```dispatchingRules.py``` scr
 When you run the script, ```main.py``` is called same as Extracting new PR's using GEP. After finish the script ```result.txt```and  ```sumofresult.txt``` files are created. The first file records all result for all PR's for each subproblem while the second file gives brief information.
 ## Extracting dynamic rules 
 If you want to extract dynamic rules, you must run the ```dynamicSelectionOfRules.py```. You can also access the related paper from this [link](http://www.hrpub.org/download/20180330/UJIBM2-11611325.pdf).
+## Using existed data
+This repository enables users not only generate data but also opening existed one. If you want to use existed dataset, you should make some modification the creating dataset on the ```__init__``` function under the ```schedulingProblem.py```. There are some prospect kinds of data options in lines between 32 and 35.  
