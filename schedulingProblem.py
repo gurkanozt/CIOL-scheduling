@@ -32,7 +32,6 @@ class FJSSP:
         #self.createDataFSSP()#create data for FJSSP
         self.createDataFJSSP()
         #self.readFJSSP()
-        aaaa=4
         #self.readFSSP()
     def createDataFSSP(self):#create data for FJSSP
         for j in range(self.nj):
