@@ -2,7 +2,8 @@
 ## Overview
 In this repository, it is focused on extracting priority rules (PR) for dynamic multi-objective flexible job shop scheduling problems using gene expression programming (GEP). This repository also enables you to test your PR's. You can find the related paper from this [link](https://www.tandfonline.com/doi/abs/10.1080/00207543.2018.1543964).
 ## Citation
-```@article{doi:10.1080/00207543.2018.1543964,
+
+@article{doi:10.1080/00207543.2018.1543964,```
         author = {Gurkan Ozturk and Ozan Bahadir and Aydin Teymourifar},
         title = {Extracting priority rules for dynamic multi-objective flexible job shop scheduling problems using gene    expression programming},
         journal = {International Journal of Production Research},
