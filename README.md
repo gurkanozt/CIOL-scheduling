@@ -2,22 +2,27 @@
 ## Overview
 In this repository, it is focused on extracting priority rules (PR) for dynamic multi-objective flexible job shop scheduling problems using gene expression programming (GEP). This repository also enables you to test your PR's. You can find the related paper from this [link](https://www.tandfonline.com/doi/abs/10.1080/00207543.2018.1543964).
 ## Citation
-     @article{doi:10.1080/00207543.2018.1543964,
-        author = {Gurkan Ozturk and Ozan Bahadir and Aydin Teymourifar},
-        title = {Extracting priority rules for dynamic multi-objective flexible job shop scheduling problems using gene expression programming},
-        journal = {International Journal of Production Research},
-        volume = {57},
-        number = {10},
-        pages = {3121-3137},
-        year  = {2019},
-        publisher = {Taylor & Francis},
-        doi = {10.1080/00207543.2018.1543964},
-        URL = { https://doi.org/10.1080/00207543.2018.1543964}}
-    @article{teymourifaradaptive,
-     title={An Adaptive Evolutionary Algorithm Integrated with Neighborhood Search Heuristics for Solving Multi-objective Flexible Job Shop Scheduling Problem},
-     author={Teymourifar, Aydin and Ozturk, Gurkan and Bahadir, Ozan},
-     journal={Co-chair},
-     pages={30}
+     @article{ozturk2019extracting,
+     title={Extracting priority rules for dynamic multi-objective flexible job shop scheduling problems using gene expression programming},
+     author={Ozturk, Gurkan and Bahadir, Ozan and Teymourifar, Aydin},
+     journal={International Journal of Production Research},
+     volume={57},
+     number={10},
+     pages={3121--3137},
+     year={2019},
+     publisher={Taylor \& Francis}},
+     URL = { https://doi.org/10.1080/00207543.2018.1543964}}
+    
+    
+    @article{teymourifar2018dynamic,
+     title={Dynamic Priority Rule Selection for Solving Multi-objective Job Shop Scheduling Problems},
+     author={Teymourifar, Aydin and Bahadir, Ozan and Ozturk, Gurkan},
+     journal={Universal Journal of Industrial and Business Management},
+     volume={6},
+     number={1},
+     pages={11--22},
+     year={2018},
+     publisher={Horizon Research Publishing}
      }
 ## Initial Setup
 This project was developed using Python2.
