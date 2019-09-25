@@ -13,7 +13,12 @@ In this repository, it is focused on extracting priority rules (PR) for dynamic 
         publisher = {Taylor & Francis},
         doi = {10.1080/00207543.2018.1543964},
         URL = { https://doi.org/10.1080/00207543.2018.1543964}}
-
+    @article{teymourifaradaptive,
+     title={An Adaptive Evolutionary Algorithm Integrated with Neighborhood Search Heuristics for Solving Multi-objective Flexible Job Shop Scheduling Problem},
+     author={Teymourifar, Aydin and Ozturk, Gurkan and Bahadir, Ozan},
+     journal={Co-chair},
+     pages={30}
+     }
 ## Initial Setup
 This project was developed using Python2.
 I highly recommend using Anaconda for Python environment management. It will help you install Shapely, which I've had some problems installing with pip. You do not need extra libraries not contained by Anaconda. 
